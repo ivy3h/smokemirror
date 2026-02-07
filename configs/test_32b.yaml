@@ -17,14 +17,14 @@ model:
 
 # Generation Settings
 generation:
-  min_plot_points: 15
-  max_plot_points: 25
-  min_conspirators: 2
+  min_plot_points: 20
+  max_plot_points: 30
+  min_conspirators: 3
   max_conspirators: 4
-  min_suspects: 3
+  min_suspects: 4
   max_suspects: 6
   discovery_paths_threshold: 1
-  initial_discovery_paths: 6
+  initial_discovery_paths: 8
 
 # Suspense Controller Settings
 suspense:

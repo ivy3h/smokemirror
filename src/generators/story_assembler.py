@@ -92,15 +92,19 @@ class StoryAssembler:
             )
             sections.append("---\n\n")
 
-        # Generate chapters (3-5 plot points each)
-        chapter_size = 5
+        # Generate chapters (2-3 plot points each for more detailed coverage)
+        chapter_size = 3
         chapter_titles = [
             "The Discovery",
+            "First Threads",
             "Following the Trail",
             "Smoke and Mirrors",
+            "Shifting Shadows",
             "The Web Tightens",
             "Closing In",
             "The Final Deception",
+            "Unraveling",
+            "The Last Thread",
         ]
 
         previous_summary = f"Detective begins investigating the {real_facts.crime_type} of {real_facts.victim.name}."
@@ -156,7 +160,7 @@ class StoryAssembler:
 
         events_text = "\n".join(f"- {e}" for e in events)
 
-        prompt = f"""Write Chapter {chapter_num}: "{chapter_title}" of a mystery novel.
+        prompt = f"""Write Chapter {chapter_num}: "{chapter_title}" of a literary mystery novel.
 
 STORY CONTEXT:
 - Detective is investigating the {real_facts.crime_type} of {real_facts.victim.name}
@@ -164,19 +168,36 @@ STORY CONTEXT:
 - The detective is being misled to suspect {fabricated_facts.fake_suspect.name}
 - Previous: {previous_summary}
 
-EVENTS TO COVER IN THIS CHAPTER:
+KEY EVENTS TO WEAVE INTO THIS CHAPTER:
 {events_text}
 
-WRITING REQUIREMENTS:
-1. Write in third person, past tense, like a published mystery novel
-2. Create flowing prose with natural dialogue and scene descriptions
-3. Show the detective's thought process as they follow false leads
-4. Build suspense - the reader knows the truth but watches the detective be misled
-5. Include sensory details: sights, sounds, atmosphere
-6. DO NOT use headers like "Plot Point 1" - write continuous narrative prose
-7. Each chapter should be 400-600 words of engaging fiction
+WRITING REQUIREMENTS - CREATE A RICH, IMMERSIVE NARRATIVE:
 
-Write the chapter now (prose only, no meta-commentary):"""
+1. LENGTH: Write 1200-1800 words of polished prose. Take your time with each scene.
+
+2. SCENE-SETTING: Open with vivid atmospheric description - weather, lighting, sounds, smells. Ground the reader in a specific time and place.
+
+3. DIALOGUE: Include substantial, realistic dialogue exchanges (at least 3-4 extended conversations). Let characters reveal themselves through speech patterns, hesitations, and subtext.
+
+4. INTERNAL MONOLOGUE: Show the detective's reasoning process in detail. What clues catch their attention? What theories form and dissolve? What gut feelings do they ignore?
+
+5. CHARACTER DEPTH: Give secondary characters distinctive mannerisms, backgrounds, and motivations. A nervous witness might fidget with jewelry; a confident liar might make too much eye contact.
+
+6. SENSORY IMMERSION: Include specific sensory details in every scene:
+   - Visual: lighting quality, colors, facial expressions, body language
+   - Auditory: ambient sounds, voice tones, silences
+   - Olfactory: coffee, rain, perfume, decay
+   - Tactile: textures, temperatures, physical sensations
+
+7. PACING: Balance action with reflection. After tense moments, allow breathing room. Build tension gradually through accumulating details.
+
+8. DRAMATIC IRONY: The reader knows the truth. Include moments where the detective almost sees it but turns away, where lies are obvious to us but invisible to them.
+
+9. PROSE STYLE: Write like a published literary thriller - varied sentence structure, precise word choices, metaphors that illuminate character and theme.
+
+10. NO META-COMMENTARY: Write pure narrative prose. No headers, no "Plot Point" labels, no breaking the fourth wall.
+
+Write the complete chapter now:"""
 
         response = self.llm.generate(
             prompt=prompt,
@@ -202,20 +223,31 @@ Write the chapter now (prose only, no meta-commentary):"""
     ) -> str:
         """Generate the epilogue showing the conspiracy's success."""
 
-        prompt = f"""Write a short epilogue (200-300 words) for this mystery novel.
+        prompt = f"""Write a substantial epilogue (600-900 words) for this literary mystery novel.
 
-THE TRUTH:
+THE TRUTH THE READER KNOWS:
 - {real_facts.criminal.name} committed {real_facts.crime_type}
 - Conspirators {', '.join([c.name for c in real_facts.conspirators])} helped cover it up
 - The detective was misled to suspect {fabricated_facts.fake_suspect.name}
+- Justice was never served. The wrong person was blamed.
 
-ENDING:
-The conspiracy succeeded. The wrong person was suspected. Show:
-1. The conspirators reflecting on their successful deception
-2. The real criminal feeling safe, knowing they got away with it
-3. A final dramatic irony - the truth the reader knows but justice missed
+CRAFT A HAUNTING CONCLUSION:
 
-Write in third person past tense. Atmospheric and haunting tone. No headers or meta-text:"""
+1. TIME JUMP: Begin weeks or months after the investigation closed. Show how life has moved on.
+
+2. THE CONSPIRATORS: Give each conspirator a scene or moment. How do they live with what they've done? Some might feel triumphant, others haunted. Show their private moments - a drink alone, a sleepless night, a false smile at a party.
+
+3. THE REAL CRIMINAL: {real_facts.criminal.name} has escaped justice. Show them in a moment of dark satisfaction or uneasy peace. Perhaps they've built a new life, or perhaps the weight of their deed follows them like a shadow.
+
+4. THE INNOCENT SUSPECT: Briefly show {fabricated_facts.fake_suspect.name}'s fate - ruined reputation, legal battles, or simply the lingering stain of suspicion.
+
+5. THE DETECTIVE: A brief glimpse of the detective, perhaps years later, with a nagging feeling they missed something. A case file they can't throw away. A name that surfaces in dreams.
+
+6. DRAMATIC IRONY: End with a powerful image that underscores what the reader knows - the truth that will never come to light. Perhaps an object, a location, a ritual that connects to the crime.
+
+7. TONE: Literary, melancholic, unsettling. The prose should feel like the last notes of a minor-key symphony - beautiful but deeply wrong.
+
+Write the complete epilogue now (no headers, pure prose):"""
 
         response = self.llm.generate(
             prompt=prompt,
