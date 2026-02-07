@@ -63,34 +63,11 @@ class StoryAssembler:
 
         sections = []
 
-        # Title
-        sections.append("# The Dual Narrative\n\n")
-        sections.append("*A Crime Mystery*\n\n")
-        sections.append("---\n\n")
-
-        # Prologue: What the reader knows (written directly, not by LLM)
+        # Generate title and prologue using LLM
         if include_reader_perspective:
-            sections.append("## Prologue: The Truth Behind the Smoke\n\n")
-            sections.append("*The reader knows what the detective does not...*\n\n")
-            sections.append(
-                f"On the night of the crime, {real_facts.criminal.name} "
-                f"committed {real_facts.crime_type}. "
-                f"The victim was {real_facts.victim.name}, "
-                f"a {real_facts.victim.occupation}. "
-                f"The motive: {real_facts.motive}.\n\n"
-            )
-            sections.append(
-                f"But {real_facts.criminal.name} did not act alone. "
-                f"A network of conspirators—{', '.join([c.name for c in real_facts.conspirators])}—"
-                f"helped construct an elaborate false narrative. "
-                f"Their plan: {real_facts.coordination_plan}.\n\n"
-            )
-            sections.append(
-                f"As the detective begins the investigation, "
-                f"the reader watches, knowing the truth, "
-                f"as every clue points in the wrong direction...\n\n"
-            )
-            sections.append("---\n\n")
+            title_and_prologue = self._generate_title_and_prologue(real_facts, fabricated_facts)
+            sections.append(title_and_prologue)
+            sections.append("\n\n---\n\n")
 
         # Generate chapters (2-3 plot points each for more detailed coverage)
         chapter_size = 3
@@ -214,6 +191,63 @@ Write the complete chapter now:"""
         chapter_text = re.sub(r"^(Plot Point|PLOT POINT).*?\n", "", chapter_text, flags=re.MULTILINE)
 
         return f"## Chapter {chapter_num}: {chapter_title}\n\n{chapter_text.strip()}"
+
+    def _generate_title_and_prologue(
+        self,
+        real_facts: CrimeFacts,
+        fabricated_facts: FabricatedFacts,
+    ) -> str:
+        """Generate an evocative title and atmospheric prologue."""
+
+        prompt = f"""Create a compelling title and prologue for a literary crime mystery novel.
+
+THE CRIME (known to the reader, hidden from the detective):
+- Crime: {real_facts.crime_type}
+- Victim: {real_facts.victim.name}, a {real_facts.victim.occupation}
+- Real Criminal: {real_facts.criminal.name}, a {real_facts.criminal.occupation}
+- Motive: {real_facts.motive}
+- Conspirators who helped cover it up: {', '.join([f"{c.name} ({c.occupation})" for c in real_facts.conspirators])}
+- Their coordination plan: {real_facts.coordination_plan}
+- The detective will be misled to suspect: {fabricated_facts.fake_suspect.name}
+
+YOUR TASK:
+
+1. CREATE A TITLE (one line):
+   - Evocative, literary, memorable
+   - Should hint at themes of deception, hidden truth, or dual reality
+   - Examples of good mystery titles: "The Silent Patient", "Gone Girl", "The Girl on the Train"
+   - DO NOT use generic titles like "The Dual Narrative" or "A Murder Mystery"
+
+2. WRITE A PROLOGUE (400-600 words):
+   - Open with atmospheric scene-setting that establishes mood and tone
+   - Reveal to the reader (but not the detective) the truth of what happened
+   - Introduce the criminal and conspirators in a way that builds intrigue
+   - End with a hook that draws the reader into the investigation
+   - Write in literary prose with vivid sensory details
+   - The prologue should feel like the opening of a published thriller
+
+FORMAT YOUR RESPONSE EXACTLY LIKE THIS:
+# [Your Creative Title Here]
+
+*A Novel*
+
+---
+
+## Prologue
+
+[Your prologue text here...]
+
+Write now:"""
+
+        response = self.llm.generate(
+            prompt=prompt,
+            max_new_tokens=2048,
+            temperature=0.9,  # Higher temperature for more creative titles
+            disable_thinking=not self.use_thinking,
+        )
+
+        text = self._strip_thinking_tags(response.text) if self.use_thinking else response.text
+        return text.strip()
 
     def _generate_epilogue(
         self,
