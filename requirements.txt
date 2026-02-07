@@ -1,0 +1,27 @@
+# Core dependencies
+torch>=2.0.0
+transformers>=4.40.0
+accelerate>=0.27.0
+bitsandbytes>=0.42.0
+
+# Configuration and utilities
+pyyaml>=6.0
+pydantic>=2.0.0
+python-dotenv>=1.0.0
+
+# Data processing
+numpy>=1.24.0
+pandas>=2.0.0
+
+# Visualization and reporting
+matplotlib>=3.7.0
+tabulate>=0.9.0
+rich>=13.0.0
+
+# Optional: For API-based models (if using external LLMs for reader simulation)
+openai>=1.0.0
+anthropic>=0.18.0
+google-generativeai>=0.4.0
+
+# Development
+tqdm>=4.65.0

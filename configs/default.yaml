@@ -1,0 +1,74 @@
+# Smokemirror Configuration
+# Crime Mystery Story Generation System
+
+# Model Configuration
+model:
+  name: "Qwen/Qwen3-8B"
+  device: "auto"  # auto, cuda, cpu
+  load_in_4bit: true
+  load_in_8bit: false
+  torch_dtype: "bfloat16"  # float16, bfloat16, float32
+  max_new_tokens: 2048
+  temperature: 0.7
+  top_p: 0.9
+  top_k: 50
+  do_sample: true
+  repetition_penalty: 1.1
+
+# Generation Settings
+generation:
+  min_plot_points: 15
+  max_plot_points: 25
+  min_conspirators: 2
+  max_conspirators: 4
+  min_suspects: 3
+  max_suspects: 6
+  discovery_paths_threshold: 1  # Minimum paths before resolution
+  initial_discovery_paths: 5
+
+# Suspense Controller Settings
+suspense:
+  initial_level: 3
+  max_level: 10
+  path_close_probability: 0.7
+  new_path_probability: 0.2
+  collision_check_sensitivity: 0.5
+
+# Reader Simulation Settings
+reader_simulation:
+  enabled: true
+  num_readers: 3
+  reader_roles:
+    - name: "logic_analyst"
+      focus: "logical consistency, timeline verification, deduction"
+      weight: 1.5
+    - name: "intuitive_reader"
+      focus: "character behavior, dialogue authenticity, immersion"
+      weight: 1.0
+    - name: "genre_expert"
+      focus: "pacing, tropes, red herrings, narrative structure"
+      weight: 1.2
+  checkpoints: [5, 10, 15]  # Plot points for criminal prediction
+  suspense_threshold: 6.0  # Minimum acceptable average suspense
+
+# Refinement Settings
+refinement:
+  max_iterations: 3
+  consensus_threshold: 2  # Number of readers flagging same issue
+  critical_issue_weight: 3.0
+  moderate_issue_weight: 1.5
+  minor_issue_weight: 0.5
+
+# Output Settings
+output:
+  save_intermediate: true
+  output_dir: "outputs"
+  format: "markdown"  # markdown, json, both
+
+# Reproducibility
+seed: 42
+
+# Logging
+logging:
+  level: "INFO"
+  save_logs: true

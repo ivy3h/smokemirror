@@ -1,0 +1,135 @@
+{
+  "real_facts": {
+    "crime_type": "murder",
+    "victim": {
+      "name": "James Wilson",
+      "role": "victim",
+      "occupation": "auditor",
+      "relationship_to_victim": "self"
+    },
+    "criminal": {
+      "name": "David Chen",
+      "role": "criminal",
+      "occupation": "CFO",
+      "motive": "Cover up embezzlement",
+      "means": "Access to victim's schedule and building",
+      "opportunity": "Arranged late night meeting"
+    },
+    "conspirators": [
+      {
+        "name": "Alice",
+        "role": "conspirator",
+        "occupation": "Secretary",
+        "leverage": "David knows about her prior fraud conviction",
+        "alibi": "Claims to have found the body at 9:30 PM",
+        "is_conspirator": true
+      },
+      {
+        "name": "Bob",
+        "role": "conspirator",
+        "occupation": "IT Admin",
+        "leverage": "Owes David $50,000 in gambling debts",
+        "alibi": "Was doing maintenance on security system",
+        "is_conspirator": true
+      },
+      {
+        "name": "Carol",
+        "role": "conspirator",
+        "occupation": "Marketing Director",
+        "leverage": "David's sister, family loyalty",
+        "alibi": "Provided David's dinner alibi",
+        "is_conspirator": true
+      }
+    ],
+    "motive": "Cover up embezzlement - James was about to expose $2M fraud",
+    "method": "Staged confrontation in parking garage, made to look like attack by intruder",
+    "timeline": {
+      "events": [
+        {"time": "6:00 PM", "description": "James stays late to review financial documents", "actor": "James Wilson", "location": "Office"},
+        {"time": "7:00 PM", "description": "Bob disables security cameras for 'maintenance'", "actor": "Bob", "location": "Security office"},
+        {"time": "7:30 PM", "description": "Carol and David arrive at restaurant for alibi", "actor": "David Chen", "location": "Maison Laurent"},
+        {"time": "8:00 PM", "description": "Alice lures James to parking garage with fake message", "actor": "Alice", "location": "Office"},
+        {"time": "8:45 PM", "description": "Crime committed during camera gap", "actor": "David Chen", "location": "Parking garage"},
+        {"time": "9:00 PM", "description": "Cameras restored, Bob returns home", "actor": "Bob", "location": "Security office"},
+        {"time": "9:30 PM", "description": "Alice 'discovers' body and calls police", "actor": "Alice", "location": "Parking garage"}
+      ]
+    },
+    "evidence": [
+      {
+        "id": "E1",
+        "description": "Security camera footage gap",
+        "type": "digital",
+        "location": "Security office",
+        "real_meaning": "Footage was deleted by Bob to hide the crime"
+      },
+      {
+        "id": "E2",
+        "description": "Industrial cleaner traces",
+        "type": "physical",
+        "location": "Crime scene",
+        "real_meaning": "Carol purchased to clean up evidence"
+      },
+      {
+        "id": "E3",
+        "description": "David's dinner receipt",
+        "type": "documentary",
+        "location": "Maison Laurent",
+        "real_meaning": "Staged alibi, timed to coincide with crime"
+      }
+    ],
+    "location": "TechCorp headquarters parking garage",
+    "coordination_plan": "Synchronized alibis: David at restaurant with Carol, Bob doing 'maintenance', Alice discovering body. Evidence planted to frame Eric Thompson, a disgruntled former employee."
+  },
+  "fabricated_facts": {
+    "fake_suspect": {
+      "name": "Eric Thompson",
+      "role": "suspect",
+      "occupation": "Former Financial Analyst",
+      "motive": "Revenge for being fired",
+      "means": "Knowledge of building layout from previous employment",
+      "opportunity": "No verified alibi for time of crime"
+    },
+    "fake_motive": "Revenge - Eric was fired after James's investigation dismissed his whistleblower complaints",
+    "fake_method": "Confrontation in parking garage that escalated to violence",
+    "fake_timeline": {
+      "events": [
+        {"time": "7:00 PM", "description": "Eric spotted near building", "actor": "Eric Thompson", "location": "Parking lot"},
+        {"time": "8:45 PM", "description": "Eric enters building through service entrance", "actor": "Eric Thompson", "location": "Service entrance"},
+        {"time": "9:00 PM", "description": "Confrontation with James in garage", "actor": "Eric Thompson", "location": "Parking garage"}
+      ]
+    },
+    "planted_evidence": [
+      {
+        "id": "PE1",
+        "description": "Eric's fingerprints on coffee cup found near scene",
+        "type": "physical",
+        "location": "Parking garage stairwell",
+        "is_planted": true,
+        "fabricated_meaning": "Eric was present at the crime scene"
+      },
+      {
+        "id": "PE2",
+        "description": "Threatening note in James's desk",
+        "type": "documentary",
+        "location": "James's office",
+        "is_planted": true,
+        "fabricated_meaning": "Pattern of threatening behavior from Eric"
+      },
+      {
+        "id": "PE3",
+        "description": "Industrial cleaner matching Eric's apartment building",
+        "type": "physical",
+        "location": "Crime scene",
+        "is_planted": true,
+        "fabricated_meaning": "Eric had access to this specific cleaner"
+      }
+    ],
+    "alibis": {
+      "David Chen": "At Maison Laurent restaurant with sister Carol from 7:30-10:00 PM, verified by receipt and staff",
+      "Alice": "At home until 9:00 PM when she returned to retrieve laptop and discovered body",
+      "Bob": "Performing scheduled maintenance on security system 6:00-7:30 PM, verified by work order",
+      "Carol": "At dinner with brother David, provided corroborating testimony"
+    },
+    "cover_story": "Eric Thompson, bitter over his termination and the dismissal of his complaints, returned to confront James Wilson. The encounter in the parking garage escalated to violence. Eric's fingerprints, threatening communications, and lack of alibi point to premeditated revenge."
+  }
+}

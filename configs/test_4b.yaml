@@ -1,0 +1,71 @@
+# Smokemirror Test Configuration
+# For Qwen3-4B model
+
+# Model Configuration
+model:
+  name: "Qwen/Qwen3-4B"
+  device: "auto"
+  load_in_4bit: false  # 4B model fits without quantization on A40
+  load_in_8bit: false
+  torch_dtype: "bfloat16"
+  max_new_tokens: 2048
+  temperature: 0.7
+  top_p: 0.9
+  top_k: 50
+  do_sample: true
+  repetition_penalty: 1.1
+
+# Generation Settings
+generation:
+  min_plot_points: 15
+  max_plot_points: 20
+  min_conspirators: 2
+  max_conspirators: 3
+  min_suspects: 3
+  max_suspects: 5
+  discovery_paths_threshold: 1
+  initial_discovery_paths: 5
+
+# Suspense Controller Settings
+suspense:
+  initial_level: 3
+  max_level: 10
+  path_close_probability: 0.6
+  new_path_probability: 0.2
+  collision_check_sensitivity: 0.5
+
+# Reader Simulation Settings - Enabled for 4B model
+reader_simulation:
+  enabled: false  # Can enable for full evaluation
+  num_readers: 2
+  reader_roles:
+    - name: "logic_analyst"
+      focus: "logical consistency"
+      weight: 1.5
+    - name: "intuitive_reader"
+      focus: "character behavior"
+      weight: 1.0
+  checkpoints: [5, 10, 15]
+  suspense_threshold: 6.0
+
+# Refinement Settings
+refinement:
+  max_iterations: 0  # Disable for faster testing
+  consensus_threshold: 2
+  critical_issue_weight: 3.0
+  moderate_issue_weight: 1.5
+  minor_issue_weight: 0.5
+
+# Output Settings
+output:
+  save_intermediate: true
+  output_dir: "outputs"
+  format: "markdown"
+
+# Reproducibility
+seed: 42
+
+# Logging
+logging:
+  level: "INFO"
+  save_logs: true

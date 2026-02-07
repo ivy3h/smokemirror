@@ -1,0 +1,68 @@
+# Smokemirror Test Configuration
+# For small models (Qwen3-0.6B, 1.7B, 4B)
+
+# Model Configuration - Small model for testing
+model:
+  name: "Qwen/Qwen3-0.6B"
+  device: "auto"
+  load_in_4bit: false  # Small models don't need quantization
+  load_in_8bit: false
+  torch_dtype: "bfloat16"
+  max_new_tokens: 1024  # Reduced for faster generation
+  temperature: 0.7
+  top_p: 0.9
+  top_k: 50
+  do_sample: true
+  repetition_penalty: 1.1
+
+# Generation Settings - Reduced for testing
+generation:
+  min_plot_points: 10
+  max_plot_points: 15
+  min_conspirators: 2
+  max_conspirators: 3
+  min_suspects: 2
+  max_suspects: 4
+  discovery_paths_threshold: 1
+  initial_discovery_paths: 4
+
+# Suspense Controller Settings
+suspense:
+  initial_level: 3
+  max_level: 10
+  path_close_probability: 0.7
+  new_path_probability: 0.2
+  collision_check_sensitivity: 0.5
+
+# Reader Simulation Settings - Disabled for speed
+reader_simulation:
+  enabled: false
+  num_readers: 1
+  reader_roles:
+    - name: "logic_analyst"
+      focus: "logical consistency"
+      weight: 1.0
+  checkpoints: [5, 10]
+  suspense_threshold: 5.0
+
+# Refinement Settings - Disabled for testing
+refinement:
+  max_iterations: 0
+  consensus_threshold: 2
+  critical_issue_weight: 3.0
+  moderate_issue_weight: 1.5
+  minor_issue_weight: 0.5
+
+# Output Settings
+output:
+  save_intermediate: true
+  output_dir: "outputs"
+  format: "markdown"
+
+# Reproducibility
+seed: 42
+
+# Logging
+logging:
+  level: "INFO"
+  save_logs: true
