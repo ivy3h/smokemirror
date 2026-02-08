@@ -4,155 +4,166 @@
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, arrows.meta, positioning, fit, backgrounds, calc}
 
-% Figure 1: Main Pipeline Overview (Full Width)
+% ============================================================
+% Figure 1: Compact Pipeline (2x2 Grid Layout) - RECOMMENDED
+% ============================================================
 \begin{figure*}[t]
 \centering
 \begin{tikzpicture}[
-    node distance=0.5cm and 0.8cm,
-    mainbox/.style={rectangle, draw, rounded corners=3pt, minimum width=2.2cm, minimum height=0.9cm, align=center, font=\footnotesize},
-    smallbox/.style={rectangle, draw, rounded corners=2pt, minimum width=1.6cm, minimum height=0.6cm, align=center, font=\scriptsize},
-    phaselabel/.style={font=\footnotesize\bfseries, text=black},
-    decision/.style={diamond, draw, aspect=2.5, minimum width=1.2cm, font=\scriptsize},
-    arrow/.style={-{Stealth[length=2mm, width=1.5mm]}, thick, draw=gray!70},
-    looparrow/.style={-{Stealth[length=2mm, width=1.5mm]}, thick, draw=gray!70, rounded corners=3pt},
+    node distance=0.3cm and 0.5cm,
+    mainbox/.style={rectangle, draw, rounded corners=2pt, minimum width=1.6cm, minimum height=0.6cm, align=center, font=\scriptsize},
+    smallbox/.style={rectangle, draw, rounded corners=2pt, minimum width=1.2cm, minimum height=0.5cm, align=center, font=\tiny},
+    phaselabel/.style={font=\scriptsize\bfseries},
+    decision/.style={diamond, draw, aspect=2, minimum width=0.8cm, font=\tiny},
+    arrow/.style={-{Stealth[length=1.5mm, width=1mm]}, draw=gray!70},
+    phasearrow/.style={-{Stealth[length=2mm, width=1.5mm]}, thick, draw=black},
+    scale=0.95
 ]
 
-% ============ PHASE 1: World Building ============
-\node[mainbox, fill=blue!15] (backstory) {Crime Backstory\\Generator};
-\node[phaselabel, above=0.2cm of backstory] {Phase 1: World Building};
+% ============ ROW 1 ============
 
-\node[smallbox, fill=blue!8, below left=0.7cm and 0.2cm of backstory] (realfacts) {Real Facts};
-\node[smallbox, fill=blue!8, below right=0.7cm and 0.2cm of backstory] (paths) {Discovery Paths};
+% PHASE 1: World Building (Top Left)
+\node[phaselabel, fill=blue!10, rounded corners=2pt, inner sep=3pt] (p1label) {Phase 1: World Building};
+\node[mainbox, fill=blue!20, below=0.3cm of p1label] (backstory) {Backstory Generator};
+\node[smallbox, fill=blue!10, below left=0.4cm and -0.2cm of backstory] (realfacts) {Real Facts};
+\node[smallbox, fill=blue!10, below right=0.4cm and -0.2cm of backstory] (paths) {Paths};
+\node[mainbox, fill=blue!20, below=0.9cm of backstory] (fabgen) {Fabricated Generator};
+\node[smallbox, fill=blue!10, below=0.3cm of fabgen] (fabfacts) {Fake Facts};
 
-\node[mainbox, fill=blue!15, below=1.5cm of backstory] (fabgen) {Fabricated Narrative\\Generator};
-\node[smallbox, fill=blue!8, below=0.5cm of fabgen] (fabfacts) {Fabricated Facts};
-
-% Phase 1 arrows
 \draw[arrow] (backstory) -- (realfacts);
 \draw[arrow] (backstory) -- (paths);
 \draw[arrow] (realfacts) -- (fabgen);
 \draw[arrow] (fabgen) -- (fabfacts);
 
-% ============ PHASE 2: Suspense Controller ============
-\node[mainbox, fill=green!15, right=2.5cm of backstory] (detective) {Detective Action\\Generation};
-\node[phaselabel, above=0.2cm of detective] {Phase 2: Suspense Meta-Controller};
+% PHASE 2: Suspense Controller (Top Right)
+\node[phaselabel, fill=green!10, rounded corners=2pt, inner sep=3pt, right=3.5cm of p1label] (p2label) {Phase 2: Suspense Controller};
+\node[mainbox, fill=green!20, below=0.3cm of p2label] (detective) {Detective Action};
+\node[decision, fill=green!10, below=0.35cm of detective] (collision) {Collision?};
+\node[smallbox, fill=red!20, below left=0.35cm and 0cm of collision] (intervention) {Intervene};
+\node[smallbox, fill=green!10, below right=0.35cm and 0cm of collision] (progress) {Progress};
+\node[mainbox, fill=green!20, below=0.9cm of collision] (state) {Update State};
+\node[smallbox, fill=green!25, below=0.3cm of state] (plotpoints) {Plot Points};
 
-\node[decision, fill=green!8, below=0.6cm of detective] (collision) {Collision?};
-
-\node[smallbox, fill=red!15, below left=0.6cm and 0.1cm of collision] (intervention) {Conspirator\\Intervention};
-\node[smallbox, fill=green!8, below right=0.6cm and 0.1cm of collision] (progress) {Standard\\Progress};
-
-\node[mainbox, fill=green!15, below=1.8cm of collision] (state) {State Update\\(Suspense, Paths)};
-
-\node[decision, fill=green!8, below=0.5cm of state] (continue) {Done?};
-
-\node[smallbox, fill=green!20, below=0.5cm of continue] (plotpoints) {Plot Points\\(20-30)};
-
-% Phase 2 arrows
 \draw[arrow] (detective) -- (collision);
-\draw[arrow] (collision) -| node[above, font=\tiny, pos=0.3] {Yes} (intervention);
-\draw[arrow] (collision) -| node[above, font=\tiny, pos=0.3] {No} (progress);
+\draw[arrow] (collision) -| node[above, font=\tiny, pos=0.25] {Y} (intervention);
+\draw[arrow] (collision) -| node[above, font=\tiny, pos=0.25] {N} (progress);
 \draw[arrow] (intervention) |- (state);
 \draw[arrow] (progress) |- (state);
-\draw[arrow] (state) -- (continue);
-\draw[arrow] (continue) -- node[right, font=\tiny] {Yes} (plotpoints);
+\draw[arrow] (state) -- (plotpoints);
+\draw[arrow, rounded corners=2pt] (state.west) -- ++(-0.4,0) |- (detective.west);
 
-% Loop back arrow
-\draw[looparrow] (continue.west) -- ++(-0.6,0) |- node[left, font=\tiny, pos=0.25] {No} (detective.west);
+% ============ ROW 2 ============
 
-% Connect Phase 1 to Phase 2
-\draw[arrow] (fabfacts.east) -- ++(0.8,0) |- (detective.west);
-\draw[arrow] (paths.east) -- ++(0.3,0) |- ([yshift=0.2cm]detective.west);
+% PHASE 3: Narrative (Bottom Left)
+\node[phaselabel, fill=orange!10, rounded corners=2pt, inner sep=3pt, below=3.2cm of p1label] (p3label) {Phase 3: Story Assembly};
+\node[mainbox, fill=orange!20, below=0.3cm of p3label] (assembler) {Story Assembler};
+\node[smallbox, fill=orange!10, below left=0.4cm and -0.3cm of assembler] (readerlayer) {Reader\\Layer};
+\node[smallbox, fill=orange!10, below right=0.4cm and -0.3cm of assembler] (detlayer) {Detective\\Layer};
+\node[mainbox, fill=orange!25, below=0.9cm of assembler] (story) {Dual-Layer Story};
 
-% ============ PHASE 3: Story Assembly ============
-\node[mainbox, fill=orange!15, right=2.5cm of detective] (assembler) {Story Assembler\\(LLM)};
-\node[phaselabel, above=0.2cm of assembler] {Phase 3: Narrative};
-
-\node[smallbox, fill=orange!8, below=0.5cm of assembler] (readerlayer) {Reader Layer\\(Truth)};
-\node[smallbox, fill=orange!8, below=0.3cm of readerlayer] (detectivelayer) {Detective Layer\\(Illusion)};
-
-\node[mainbox, fill=orange!20, below=0.5cm of detectivelayer] (story) {Dual-Layer\\Story};
-
-% Phase 3 arrows
 \draw[arrow] (assembler) -- (readerlayer);
-\draw[arrow] (readerlayer) -- (detectivelayer);
-\draw[arrow] (detectivelayer) -- (story);
+\draw[arrow] (assembler) -- (detlayer);
+\draw[arrow] (readerlayer) |- (story);
+\draw[arrow] (detlayer) |- (story);
 
-% Connect Phase 2 to Phase 3
-\draw[arrow] (plotpoints.east) -- ++(0.5,0) |- (assembler.west);
+% PHASE 4: Evaluation (Bottom Right)
+\node[phaselabel, fill=purple!10, rounded corners=2pt, inner sep=3pt, right=3.5cm of p3label] (p4label) {Phase 4: Reader Simulation};
+\node[mainbox, fill=purple!20, below=0.3cm of p4label] (readsim) {Reader Agents};
+\node[smallbox, fill=purple!10, below left=0.4cm and -0.1cm of readsim] (logic) {Logic};
+\node[smallbox, fill=purple!10, below=0.4cm of readsim] (intuitive) {Intuitive};
+\node[smallbox, fill=purple!10, below right=0.4cm and -0.1cm of readsim] (genre) {Genre};
+\node[mainbox, fill=purple!25, below=0.9cm of readsim] (metrics) {Metrics \& Scores};
 
-% ============ PHASE 4: Evaluation ============
-\node[mainbox, fill=purple!15, right=2.5cm of assembler] (readsim) {Reader\\Simulation};
-\node[phaselabel, above=0.2cm of readsim] {Phase 4: Evaluation};
-
-\node[smallbox, fill=purple!8, below left=0.6cm and 0cm of readsim] (logic) {Logic\\Analyst};
-\node[smallbox, fill=purple!8, below=0.6cm of readsim] (intuitive) {Intuitive\\Reader};
-\node[smallbox, fill=purple!8, below right=0.6cm and 0cm of readsim] (genre) {Genre\\Expert};
-
-\node[mainbox, fill=purple!15, below=1.5cm of readsim] (metrics) {Metrics\\Calculator};
-
-\node[smallbox, fill=purple!20, below=0.5cm of metrics] (scores) {Suspense Curve\\Quality Scores};
-
-% Phase 4 arrows
 \draw[arrow] (readsim) -- (logic);
 \draw[arrow] (readsim) -- (intuitive);
 \draw[arrow] (readsim) -- (genre);
 \draw[arrow] (logic) |- (metrics);
 \draw[arrow] (intuitive) -- (metrics);
 \draw[arrow] (genre) |- (metrics);
-\draw[arrow] (metrics) -- (scores);
 
-% Connect Phase 3 to Phase 4
-\draw[arrow] (story.east) -- ++(0.5,0) |- (readsim.west);
+% ============ PHASE CONNECTIONS ============
+% Phase 1 -> Phase 2
+\draw[phasearrow] (fabfacts.east) -- ++(0.5,0) |- ([yshift=-0.1cm]detective.west);
+\draw[phasearrow] (paths.east) -- ++(0.3,0) |- ([yshift=0.1cm]detective.west);
 
-% ============ Background Shading ============
+% Phase 2 -> Phase 3
+\draw[phasearrow] (plotpoints.south) -- ++(0,-0.3) -| ([xshift=0.3cm]assembler.north);
+
+% Phase 3 -> Phase 4
+\draw[phasearrow] (story.east) -- ++(0.6,0) |- (readsim.west);
+
+% ============ Background Boxes ============
 \begin{scope}[on background layer]
-    \node[fit=(backstory)(realfacts)(paths)(fabgen)(fabfacts),
-          fill=blue!3, rounded corners=5pt, inner sep=0.4cm] {};
-    \node[fit=(detective)(collision)(intervention)(progress)(state)(continue)(plotpoints),
-          fill=green!3, rounded corners=5pt, inner sep=0.4cm] {};
-    \node[fit=(assembler)(readerlayer)(detectivelayer)(story),
-          fill=orange!3, rounded corners=5pt, inner sep=0.4cm] {};
-    \node[fit=(readsim)(logic)(intuitive)(genre)(metrics)(scores),
-          fill=purple!3, rounded corners=5pt, inner sep=0.4cm] {};
+    \node[fit=(p1label)(backstory)(realfacts)(paths)(fabgen)(fabfacts),
+          fill=blue!3, rounded corners=4pt, inner sep=0.2cm] {};
+    \node[fit=(p2label)(detective)(collision)(intervention)(progress)(state)(plotpoints),
+          fill=green!3, rounded corners=4pt, inner sep=0.2cm] {};
+    \node[fit=(p3label)(assembler)(readerlayer)(detlayer)(story),
+          fill=orange!3, rounded corners=4pt, inner sep=0.2cm] {};
+    \node[fit=(p4label)(readsim)(logic)(intuitive)(genre)(metrics),
+          fill=purple!3, rounded corners=4pt, inner sep=0.2cm] {};
 \end{scope}
 
 \end{tikzpicture}
-\caption{Overview of the \textsc{SmokeMirror} story generation pipeline. The system constructs dual-layer mystery narratives through four phases: (1) generating ground truth and fabricated facts, (2) iteratively creating plot points with collision detection for suspense management, (3) assembling prose with parallel reader/detective perspectives, and (4) multi-agent evaluation simulating different reader types.}
+\caption{The \textsc{SmokeMirror} pipeline generates dual-layer mystery narratives through four phases: (1) creating ground truth and fabricated cover stories, (2) iteratively generating plot points with collision detection to manage suspense, (3) assembling prose with parallel reader/detective perspectives, and (4) multi-agent evaluation from different reader viewpoints.}
 \label{fig:pipeline}
 \end{figure*}
 
 
 % ============================================================
-% Figure 2: Collision Detection Detail (Single Column)
+% Figure 1 Alternative: Single Column Vertical Layout
+% Use this if you need a single-column figure
 % ============================================================
-
 \begin{figure}[t]
 \centering
 \begin{tikzpicture}[
-    node distance=0.4cm,
-    box/.style={rectangle, draw, rounded corners=2pt, minimum width=2cm, minimum height=0.7cm, align=center, font=\scriptsize},
+    node distance=0.25cm,
+    phase/.style={rectangle, draw, rounded corners=3pt, minimum width=5.5cm, minimum height=0.7cm, align=center, font=\scriptsize},
+    arrow/.style={-{Stealth[length=2mm]}, thick},
+    label/.style={font=\tiny, align=left},
+]
+
+\node[phase, fill=blue!15] (p1) {\textbf{Phase 1:} World Building};
+\node[label, right=0.1cm of p1.east, anchor=west] {Real facts + Fabricated narrative};
+
+\node[phase, fill=green!15, below=0.4cm of p1] (p2) {\textbf{Phase 2:} Suspense Meta-Controller};
+\node[label, right=0.1cm of p2.east, anchor=west] {Collision detection + Intervention};
+
+\node[phase, fill=orange!15, below=0.4cm of p2] (p3) {\textbf{Phase 3:} Story Assembly};
+\node[label, right=0.1cm of p3.east, anchor=west] {Dual-layer narrative generation};
+
+\node[phase, fill=purple!15, below=0.4cm of p3] (p4) {\textbf{Phase 4:} Reader Simulation};
+\node[label, right=0.1cm of p4.east, anchor=west] {Multi-agent evaluation};
+
+\draw[arrow] (p1) -- (p2);
+\draw[arrow] (p2) -- (p3);
+\draw[arrow] (p3) -- (p4);
+
+\end{tikzpicture}
+\caption{High-level overview of the \textsc{SmokeMirror} pipeline.}
+\label{fig:pipeline-simple}
+\end{figure}
+
+
+% ============================================================
+% Figure 2: Collision Detection Detail (Single Column)
+% ============================================================
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+    node distance=0.35cm,
+    box/.style={rectangle, draw, rounded corners=2pt, minimum width=1.8cm, minimum height=0.6cm, align=center, font=\scriptsize},
     arrow/.style={-{Stealth[length=1.5mm]}, thick},
 ]
 
-% Detective action
-\node[box, fill=green!15] (action) {Detective investigates\\suspect's alibi};
+\node[box, fill=green!15] (action) {Detective Action};
+\node[box, fill=yellow!20, below=0.4cm of action] (check) {Collision Detector};
+\node[box, fill=red!20, below left=0.5cm and 0.2cm of check] (collision) {Collision};
+\node[box, fill=blue!15, below right=0.5cm and 0.2cm of check] (safe) {Safe};
+\node[box, fill=red!30, below=0.4cm of collision] (intervene) {Conspirator\\Intervenes};
+\node[box, fill=orange!15, below=0.4cm of intervene] (misdirect) {Misdirection};
+\node[box, fill=blue!20, below=0.8cm of safe] (progress) {Progress};
 
-% Collision check
-\node[box, fill=yellow!20, below=0.5cm of action] (check) {Collision Detector};
-
-% Two branches
-\node[box, fill=red!20, below left=0.6cm and 0.3cm of check] (collision) {COLLISION\\Truth exposed};
-\node[box, fill=blue!15, below right=0.6cm and 0.3cm of check] (safe) {SAFE\\Continue};
-
-% Intervention
-\node[box, fill=red!30, below=0.5cm of collision] (intervene) {Conspirator\\intervenes};
-
-% Results
-\node[box, fill=orange!15, below=0.5cm of intervene] (misdirect) {Detective\\misdirected};
-\node[box, fill=blue!20, below=0.5cm of safe] (progress) {Detective\\progresses};
-
-% Arrows
 \draw[arrow] (action) -- (check);
 \draw[arrow] (check) -- node[left, font=\tiny] {Yes} (collision);
 \draw[arrow] (check) -- node[right, font=\tiny] {No} (safe);
@@ -161,43 +172,69 @@
 \draw[arrow] (safe) -- (progress);
 
 \end{tikzpicture}
-\caption{Collision detection mechanism. When the detective's action threatens to expose the truth, a conspirator intervenes to maintain the cover-up.}
+\caption{Collision detection: when the detective approaches truth, conspirators intervene to maintain the cover-up.}
 \label{fig:collision}
 \end{figure}
 
 
 % ============================================================
-% Figure 3: Dual-Layer Narrative Structure (Single Column)
+% Figure 3: Dual-Layer Narrative (Single Column)
 % ============================================================
-
 \begin{figure}[t]
 \centering
 \begin{tikzpicture}[
     node distance=0.3cm,
-    layer/.style={rectangle, draw, rounded corners=3pt, minimum width=6cm, minimum height=1.2cm, align=left, font=\scriptsize},
+    layer/.style={rectangle, draw, rounded corners=3pt, minimum width=5.8cm, minimum height=1cm, align=left, font=\scriptsize, text width=5.5cm},
     arrow/.style={-{Stealth[length=1.5mm]}, thick, dashed},
 ]
 
-% Reader layer (top)
 \node[layer, fill=green!15] (reader) {
     \textbf{Reader Layer (Truth)}\\
-    \textit{The reader watches Marcus slip poison into the wine glass...}
+    \textit{Marcus slips poison into the wine...}
 };
 
-% Detective layer (bottom)
-\node[layer, fill=blue!15, below=0.8cm of reader] (detective) {
+\node[layer, fill=blue!15, below=0.6cm of reader] (detective) {
     \textbf{Detective Layer (Illusion)}\\
-    \textit{Detective Chen examines the wine glass, finding only the victim's fingerprints...}
+    \textit{Chen finds only the victim's prints...}
 };
 
-% Connection
-\node[font=\scriptsize, right=0.3cm of reader.east, anchor=west] (knows) {Reader knows};
-\node[font=\scriptsize, right=0.3cm of detective.east, anchor=west] (misled) {Detective misled};
-
-% Dramatic irony arrow
 \draw[arrow, <->] (reader.south) -- node[right, font=\tiny] {Dramatic Irony} (detective.north);
 
 \end{tikzpicture}
-\caption{Dual-layer narrative structure. The reader observes both the truth and the detective's flawed investigation, creating sustained dramatic irony.}
+\caption{Dual-layer structure creates dramatic irony: readers know the truth while watching the detective be misled.}
 \label{fig:dual-layer}
+\end{figure}
+
+
+% ============================================================
+% Figure 4: Horizontal Flow (Alternative - Very Compact)
+% ============================================================
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+    node distance=0.15cm,
+    box/.style={rectangle, draw, rounded corners=2pt, minimum width=1.1cm, minimum height=0.8cm, align=center, font=\tiny},
+    arrow/.style={-{Stealth[length=1.5mm]}, thick},
+]
+
+\node[box, fill=blue!20] (p1) {World\\Building};
+\node[box, fill=green!20, right=0.3cm of p1] (p2) {Suspense\\Controller};
+\node[box, fill=orange!20, right=0.3cm of p2] (p3) {Story\\Assembly};
+\node[box, fill=purple!20, right=0.3cm of p3] (p4) {Reader\\Simulation};
+\node[box, fill=gray!20, right=0.3cm of p4] (out) {Metrics};
+
+\draw[arrow] (p1) -- (p2);
+\draw[arrow] (p2) -- (p3);
+\draw[arrow] (p3) -- (p4);
+\draw[arrow] (p4) -- (out);
+
+% Labels below
+\node[below=0.15cm of p1, font=\tiny, align=center] {Facts};
+\node[below=0.15cm of p2, font=\tiny, align=center] {Plot Points};
+\node[below=0.15cm of p3, font=\tiny, align=center] {Narrative};
+\node[below=0.15cm of p4, font=\tiny, align=center] {Evaluation};
+
+\end{tikzpicture}
+\caption{Compact pipeline overview.}
+\label{fig:pipeline-compact}
 \end{figure}
