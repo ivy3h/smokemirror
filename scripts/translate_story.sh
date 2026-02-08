@@ -10,7 +10,7 @@
 
 # Activate environment
 source ~/.bashrc
-conda activate tinker
+conda activate base
 
 # Set HuggingFace cache to coc6 storage
 export HF_HOME=/coc/pskynet6/jhe478/huggingface
@@ -29,7 +29,7 @@ echo "GPU: $(nvidia-smi --query-gpu=name --format=csv,noheader 2>/dev/null || ec
 echo "=========================================="
 
 # Translate the story
-python scripts/translate_story.py "$1" --model "Qwen/Qwen2.5-7B-Instruct"
+python scripts/translate_story.py --input "$1" --model "Qwen/Qwen2.5-7B-Instruct"
 
 echo ""
 echo "=========================================="

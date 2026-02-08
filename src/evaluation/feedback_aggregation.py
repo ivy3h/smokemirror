@@ -154,7 +154,10 @@ class FeedbackAggregator:
 
         for eval in evaluations:
             for flag in eval.inconsistency_flags:
-                pp_id = flag.get("plot_point", 0)
+                try:
+                    pp_id = int(flag.get("plot_point", 0))
+                except (ValueError, TypeError):
+                    pp_id = 0
                 flags_by_point[pp_id].append({
                     "reader": eval.reader_role,
                     "issue": flag.get("issue", "Unknown"),

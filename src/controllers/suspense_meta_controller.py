@@ -1026,6 +1026,10 @@ Write the resolution scene:"""
         revised_points = plot_points.copy()
 
         for target_id in revision_targets:
+            try:
+                target_id = int(target_id)
+            except (ValueError, TypeError):
+                continue
             if target_id < 0 or target_id >= len(revised_points):
                 continue
 

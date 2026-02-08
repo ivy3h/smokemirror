@@ -329,7 +329,8 @@ def main():
     print("\n" + "=" * 60)
     print("STORY PREVIEW (first 2000 chars)")
     print("=" * 60)
-    print(story_text[:2000])
+    preview = story_text[:2000].encode("ascii", errors="replace").decode("ascii")
+    print(preview)
     if len(story_text) > 2000:
         print("\n... [truncated] ...")
 

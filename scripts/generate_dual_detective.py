@@ -30,12 +30,12 @@ def extract_plot_annotations(story: str) -> dict:
     """Extract all plot annotations from the story and create an index."""
 
     annotations = {
-        "关键线索": [],      # Key clues
-        "红鲱鱼": [],        # Red herrings
-        "不在场证明": [],    # Alibis
-        "误导行为": [],      # Misdirections
-        "险象环生": [],      # Close calls
-        "疑心渐起": [],      # Growing suspicion
+        "key_clue": [],
+        "red_herring": [],
+        "alibi": [],
+        "misdirection": [],
+        "close_call": [],
+        "growing_suspicion": [],
     }
 
     # Find current chapter for each annotation
@@ -51,45 +51,45 @@ def extract_plot_annotations(story: str) -> dict:
                 current_chapter += ": " + chapter_match.group(2).strip()
 
         # Extract annotations
-        # 【关键线索 #N: 描述】
-        for match in re.finditer(r'【关键线索\s*#?(\d+)?[:\s]*([^】]+)】', line):
+        # [KEY_CLUE #N: description]
+        for match in re.finditer(r'\[KEY_CLUE\s*#?(\d+)?[:\s]*([^\]]+)\]', line):
             num = match.group(1) or "?"
             desc = match.group(2).strip()
-            annotations["关键线索"].append({
+            annotations["key_clue"].append({
                 "number": num,
                 "description": desc,
                 "chapter": current_chapter
             })
 
-        # 【红鲱鱼 #N: 描述】
-        for match in re.finditer(r'【红鲱鱼\s*#?(\d+)?[:\s]*([^】]+)】', line):
+        # [RED_HERRING #N: description]
+        for match in re.finditer(r'\[RED_HERRING\s*#?(\d+)?[:\s]*([^\]]+)\]', line):
             num = match.group(1) or "?"
             desc = match.group(2).strip()
-            annotations["红鲱鱼"].append({
+            annotations["red_herring"].append({
                 "number": num,
                 "description": desc,
                 "chapter": current_chapter
             })
 
-        # 【不在场证明: 人名 - 状态】
-        for match in re.finditer(r'【不在场证明[:\s]*([^】]+)】', line):
+        # [ALIBI: name - status]
+        for match in re.finditer(r'\[ALIBI[:\s]*([^\]]+)\]', line):
             desc = match.group(1).strip()
-            annotations["不在场证明"].append({
+            annotations["alibi"].append({
                 "description": desc,
                 "chapter": current_chapter
             })
 
-        # 【误导行为】
-        if '【误导行为】' in line:
-            annotations["误导行为"].append({"chapter": current_chapter})
+        # [MISDIRECTION]
+        if '[MISDIRECTION]' in line:
+            annotations["misdirection"].append({"chapter": current_chapter})
 
-        # 【险象环生】
-        if '【险象环生】' in line:
-            annotations["险象环生"].append({"chapter": current_chapter})
+        # [CLOSE_CALL]
+        if '[CLOSE_CALL]' in line:
+            annotations["close_call"].append({"chapter": current_chapter})
 
-        # 【疑心渐起】
-        if '【疑心渐起】' in line:
-            annotations["疑心渐起"].append({"chapter": current_chapter})
+        # [GROWING_SUSPICION]
+        if '[GROWING_SUSPICION]' in line:
+            annotations["growing_suspicion"].append({"chapter": current_chapter})
 
     return annotations
 
@@ -98,50 +98,50 @@ def generate_plot_index(annotations: dict) -> str:
     """Generate a plot index summary from annotations."""
 
     index = []
-    index.append("\n\n---\n\n## 剧情索引 (Plot Index)\n")
+    index.append("\n\n---\n\n## Plot Index\n")
 
     # Key Clues
-    if annotations["关键线索"]:
-        index.append("\n### 关键线索 (Key Clues)\n")
-        for clue in annotations["关键线索"]:
+    if annotations["key_clue"]:
+        index.append("\n### Key Clues\n")
+        for clue in annotations["key_clue"]:
             index.append(f"- **#{clue['number']}** {clue['description']} — *{clue['chapter']}*\n")
 
     # Red Herrings
-    if annotations["红鲱鱼"]:
-        index.append("\n### 红鲱鱼 (Red Herrings)\n")
-        for rh in annotations["红鲱鱼"]:
+    if annotations["red_herring"]:
+        index.append("\n### Red Herrings\n")
+        for rh in annotations["red_herring"]:
             index.append(f"- **#{rh['number']}** {rh['description']} — *{rh['chapter']}*\n")
 
     # Alibis
-    if annotations["不在场证明"]:
-        index.append("\n### 不在场证明 (Alibis)\n")
-        for alibi in annotations["不在场证明"]:
+    if annotations["alibi"]:
+        index.append("\n### Alibis\n")
+        for alibi in annotations["alibi"]:
             index.append(f"- {alibi['description']} — *{alibi['chapter']}*\n")
 
     # Misdirections
-    if annotations["误导行为"]:
-        index.append("\n### 误导行为 (Misdirections by Detective B)\n")
-        chapters = [m['chapter'] for m in annotations["误导行为"]]
-        index.append(f"- 出现章节: {', '.join(set(chapters))}\n")
-        index.append(f"- 总计: {len(annotations['误导行为'])} 次\n")
+    if annotations["misdirection"]:
+        index.append("\n### Misdirections by Detective B\n")
+        chapters = [m['chapter'] for m in annotations["misdirection"]]
+        index.append(f"- Chapters: {', '.join(set(chapters))}\n")
+        index.append(f"- Total: {len(annotations['misdirection'])} occurrences\n")
 
     # Close Calls
-    if annotations["险象环生"]:
-        index.append("\n### 险象环生 (Close Calls)\n")
-        chapters = [c['chapter'] for c in annotations["险象环生"]]
-        index.append(f"- 出现章节: {', '.join(set(chapters))}\n")
-        index.append(f"- 总计: {len(annotations['险象环生'])} 次\n")
+    if annotations["close_call"]:
+        index.append("\n### Close Calls\n")
+        chapters = [c['chapter'] for c in annotations["close_call"]]
+        index.append(f"- Chapters: {', '.join(set(chapters))}\n")
+        index.append(f"- Total: {len(annotations['close_call'])} occurrences\n")
 
     # Growing Suspicion
-    if annotations["疑心渐起"]:
-        index.append("\n### 疑心渐起 (A's Growing Suspicion)\n")
-        chapters = [s['chapter'] for s in annotations["疑心渐起"]]
-        index.append(f"- 出现章节: {', '.join(set(chapters))}\n")
-        index.append(f"- 总计: {len(annotations['疑心渐起'])} 次\n")
+    if annotations["growing_suspicion"]:
+        index.append("\n### A's Growing Suspicion\n")
+        chapters = [s['chapter'] for s in annotations["growing_suspicion"]]
+        index.append(f"- Chapters: {', '.join(set(chapters))}\n")
+        index.append(f"- Total: {len(annotations['growing_suspicion'])} occurrences\n")
 
     # Statistics
     total = sum(len(v) for v in annotations.values())
-    index.append(f"\n---\n*共标注 {total} 个关键剧情点*\n")
+    index.append(f"\n---\n*{total} key plot points annotated*\n")
 
     return "".join(index)
 
@@ -162,7 +162,7 @@ Two detectives are assigned to investigate a murder case together. What no one k
 
 ## REQUIRED MYSTERY ELEMENTS:
 
-### 1. THE CRIME (犯罪过程)
+### 1. THE CRIME
 - What happened, how, when, where
 - The killer-detective's motive and method
 - How they planned and executed the murder
@@ -174,28 +174,28 @@ Two detectives are assigned to investigate a murder case together. What no one k
 - **The Victim**: Who they were, why they were killed
 - **Suspects (4-7 people)**: Each with relationship to victim, motive, and opportunity
 
-### 3. ALIBIS (不在场证明)
+### 3. ALIBIS
 For each suspect, create:
 - Their claimed alibi for the time of murder
 - Whether the alibi is solid, weak, or false
 - Who can verify (or contradict) their alibi
 - Detective B's fake alibi and how they maintain it
 
-### 4. RED HERRINGS (误导线索/红鲱鱼)
+### 4. RED HERRINGS
 Create 3-5 misleading clues that:
 - Point toward innocent suspects
 - Are planted or highlighted by Detective B
 - Seem convincing but have innocent explanations
 - Distract from the real evidence
 
-### 5. KEY CLUES (关键线索)
+### 5. KEY CLUES
 Create 4-6 crucial pieces of evidence that:
 - Could expose Detective B if properly analyzed
 - Are overlooked, misinterpreted, or hidden
 - Eventually lead Detective A to the truth
 - Include physical evidence, witness statements, and behavioral inconsistencies
 
-### 6. THE INVESTIGATION PROCESS (破案过程)
+### 6. THE INVESTIGATION PROCESS
 - How the case unfolds step by step
 - Key interviews and discoveries
 - Moments where Detective A gets close to the truth
@@ -247,14 +247,14 @@ Create 4-6 crucial pieces of evidence that:
 
 [Continue for 4-7 suspects total]
 
-### Red Herrings (误导线索)
+### Red Herrings
 
 1. **[Red Herring 1]**: [Description] - Points to: [Which suspect] - True explanation: [Why it's misleading]
 2. **[Red Herring 2]**: [...]
 3. **[Red Herring 3]**: [...]
 [Add more as needed]
 
-### Key Clues (关键线索)
+### Key Clues
 
 1. **[Clue 1]**: [Description] - Significance: [What it really means] - Status: [Found/Hidden/Misinterpreted]
 2. **[Clue 2]**: [...]
@@ -402,12 +402,12 @@ Create the chapter outline now:"""
 6. **PLOT ANNOTATIONS** (IMPORTANT!):
    When key mystery elements appear in the narrative, add inline annotations using this format:
 
-   - **Key Clue discovered**: `【关键线索 #N: 简述】` (e.g., 【关键线索 #1: 手套纤维】)
-   - **Red Herring planted**: `【红鲱鱼 #N: 简述】` (e.g., 【红鲱鱼 #2: 伪造信件】)
-   - **Alibi mentioned**: `【不在场证明: 人名 - 状态】` (e.g., 【不在场证明: Rebecca - 虚假】)
-   - **Detective B misdirects**: `【误导行为】` when B actively misleads A
-   - **Close call moment**: `【险象环生】` when B nearly gets caught
-   - **A's suspicion grows**: `【疑心渐起】` when A starts doubting B
+   - **Key Clue discovered**: `[KEY_CLUE #N: brief description]` (e.g., [KEY_CLUE #1: glove fibers])
+   - **Red Herring planted**: `[RED_HERRING #N: brief description]` (e.g., [RED_HERRING #2: forged letter])
+   - **Alibi mentioned**: `[ALIBI: name - status]` (e.g., [ALIBI: Rebecca - false])
+   - **Detective B misdirects**: `[MISDIRECTION]` when B actively misleads A
+   - **Close call moment**: `[CLOSE_CALL]` when B nearly gets caught
+   - **A's suspicion grows**: `[GROWING_SUSPICION]` when A starts doubting B
 
    Place annotations at the END of the relevant paragraph, not mid-sentence.
    These help readers track the mystery elements throughout the story.
