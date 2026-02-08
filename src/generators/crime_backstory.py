@@ -174,12 +174,23 @@ class CrimeBackstoryGenerator:
         # Parse evidence
         evidence_list = []
         for e_data in data.get("evidence", []):
+            # Assign steps_required based on evidence type: physical/digital
+            # evidence requires more investigation steps (multi-step clues)
+            etype = e_data.get("type", "physical").lower()
+            if etype in ("physical", "digital"):
+                steps = random.randint(2, 3)
+            elif etype == "documentary":
+                steps = random.randint(1, 2)
+            else:  # testimonial, circumstantial
+                steps = 1
+
             evidence = Evidence(
                 id=e_data.get("id", f"E{len(evidence_list)}"),
                 description=e_data.get("description", "Unknown evidence"),
-                evidence_type=self._parse_evidence_type(e_data.get("type", "physical")),
+                evidence_type=self._parse_evidence_type(etype),
                 location=e_data.get("location", "Unknown"),
                 real_meaning=e_data.get("real_meaning", "Unknown meaning"),
+                steps_required=steps,
             )
             evidence_list.append(evidence)
 

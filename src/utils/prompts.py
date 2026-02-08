@@ -62,6 +62,34 @@ Generate the following in valid JSON format:
 
 Be creative and ensure all details are internally consistent. The crime should be complex enough to support at least 15 plot points in the investigation."""
 
+    # ========== Detective Stakes Generation ==========
+
+    DETECTIVE_STAKES_PROMPT = """Create a detective protagonist for this crime mystery with high personal stakes.
+
+CRIME: {crime_summary}
+SETTING: {setting}
+
+The detective needs:
+1. A name and brief background
+2. PERSONAL STAKES: A compelling reason why solving this case matters personally (beyond professional duty)
+3. DIRE CONSEQUENCE: A specific, serious consequence if the detective fails to solve the case in time
+4. DEADLINE: A concrete, urgent reason why the investigation has a strict time limit
+
+Good examples of stakes:
+- The detective's protege is the prime suspect and will be convicted if the real criminal isn't found
+- A serial pattern suggests another crime will happen soon if not stopped
+- The detective's own past mistake led to this case and failure means career destruction
+- Critical evidence will be legally inadmissible or physically destroyed after a deadline
+
+Generate in JSON:
+{{
+    "name": "detective's full name",
+    "background": "1-2 sentence professional background",
+    "personal_stakes": "why this case matters personally to the detective",
+    "dire_consequence": "specific bad outcome if detective fails",
+    "deadline_reason": "concrete reason for time pressure with specific timeframe"
+}}"""
+
     # ========== Fabricated Narrative Generation ==========
 
     FABRICATED_NARRATIVE_SYSTEM = """You are a criminal mastermind who must create a convincing false narrative to cover up a crime.
@@ -115,25 +143,40 @@ Make the fabricated narrative plausible enough to fool an experienced detective 
 
     # ========== Detective Action Generation ==========
 
-    DETECTIVE_ACTION_PROMPT = """You are writing the next action of a detective investigating a crime.
+    DETECTIVE_ACTION_PROMPT = """You are writing the next action of a detective investigating a crime under mounting pressure.
 
-CURRENT CASE STATE:
-- Crime: {crime_summary}
-- What detective knows so far: {detective_knowledge}
-- Current leads: {current_leads}
-- Recent developments: {recent_developments}
+CASE: {crime_summary}
+DETECTIVE: {detective_name} — {detective_stakes}
+IF FAILURE: {dire_consequence}
 
-Generate the detective's next investigative action. The action should:
-1. Follow logically from what the detective currently knows
-2. Attempt to verify or follow up on existing leads
-3. Be a concrete, specific action (interview, examine evidence, visit location, etc.)
+COUNTDOWN: {time_remaining} of {total_time} time units remaining. Reason: {deadline_reason}
+ESTIMATED SUCCESS CHANCE: {success_probability}%
 
-Format your response as:
+=== COMPLETE INVESTIGATION HISTORY ===
+{accumulated_actions}
+
+=== INVESTIGATION AGENDA (from crime scene analysis) ===
+{investigation_agenda}
+
+=== CURRENT STATE ===
+- What detective knows: {detective_knowledge}
+- Open leads remaining: {current_leads}
+- Discovery paths closed: {closed_paths_count} of {total_paths_count}
+
+The detective has tried {num_previous_actions} actions so far but has NOT solved the case.
+{urgency_note}
+
+Generate the detective's next investigative action. The action MUST:
+1. Be DIFFERENT from all previous actions listed above
+2. Follow logically from accumulated knowledge and remaining leads
+3. Reflect the growing urgency as time runs out
+4. Be a concrete, specific action (interview, examine evidence, visit location, etc.)
+
+Format as JSON:
 {{
     "action": "specific action the detective takes",
-    "reasoning": "why the detective chose this action",
-    "target": "who/what is the target of this action",
-    "expected_outcome": "what the detective hopes to learn"
+    "reasoning": "why this action given everything tried so far and the time pressure",
+    "urgency": "how the countdown affects this choice"
 }}"""
 
     # ========== Collision Detection ==========
@@ -178,11 +221,15 @@ CONSPIRATOR:
 VULNERABLE POINT:
 {vulnerable_point}
 
+COUNTDOWN CONTEXT:
+The detective has {time_remaining} of {total_time} time units left. The conspirator knows that running out the clock helps the conspiracy succeed.
+
 Generate an intervention that:
 1. Appears natural and not suspicious
 2. Effectively patches the crack in the fabricated narrative
 3. Is consistent with the conspirator's character and position
 4. Closes off this path to the truth
+5. WASTES THE DETECTIVE'S PRECIOUS TIME (delays, misdirects, creates false leads to chase)
 
 Format your response as:
 {{
@@ -190,6 +237,7 @@ Format your response as:
     "action": "specific action the conspirator takes",
     "justification": "how they explain their involvement to the detective",
     "effectiveness": "how this closes off the discovery path",
+    "time_wasted": "how much time this costs the detective",
     "risk_level": "low/medium/high - how suspicious might this appear"
 }}"""
 
@@ -203,17 +251,20 @@ DETECTIVE'S ACTION:
 CURRENT STATE:
 {current_state}
 
+COUNTDOWN: {time_remaining} of {total_time} time units remaining. The detective cannot afford delays.
+
 Generate a natural obstacle (bureaucratic delay, uncooperative witness, missing records, etc.) that:
 1. Is realistic and not contrived
 2. Delays but doesn't permanently block the investigation
-3. Increases narrative tension
+3. Increases narrative tension by CONSUMING PRECIOUS TIME
+4. Makes the reader worry about the detective's chances of solving the case before the deadline
 
 Format your response as:
 {{
     "obstacle_type": "type of obstacle",
     "description": "what happens",
     "impact": "how this affects the investigation",
-    "duration": "how long this delays things",
+    "time_cost": "how much of the detective's limited time this consumes",
     "workaround": "potential way around this obstacle (for future plot points)"
 }}"""
 

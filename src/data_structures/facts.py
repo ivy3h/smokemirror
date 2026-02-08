@@ -91,6 +91,7 @@ class Evidence:
     is_planted: bool = False
     real_meaning: Optional[str] = None  # What it actually proves
     fabricated_meaning: Optional[str] = None  # What conspirators want detective to think
+    steps_required: int = 1  # How many investigation steps to fully obtain this clue
 
     def to_dict(self) -> dict:
         return {
@@ -102,6 +103,7 @@ class Evidence:
             "is_planted": self.is_planted,
             "real_meaning": self.real_meaning,
             "fabricated_meaning": self.fabricated_meaning,
+            "steps_required": self.steps_required,
         }
 
 
@@ -199,6 +201,32 @@ class DiscoveryPath:
 
 
 @dataclass
+class DetectiveProfile:
+    """The detective protagonist with personal stakes for suspense.
+
+    Implements suspense theory elements:
+    (a) Reader affinity — a fleshed-out protagonist the reader cares about
+    (b) Important objective — solving the case matters personally
+    (c) Dire consequence — specific bad outcome if the detective fails
+    Plus a countdown deadline to create time pressure.
+    """
+    name: str
+    background: str
+    personal_stakes: str  # Why this case matters personally
+    dire_consequence: str  # What happens if detective fails
+    deadline_reason: str  # Why there's a time limit
+
+    def to_dict(self) -> dict:
+        return {
+            "name": self.name,
+            "background": self.background,
+            "personal_stakes": self.personal_stakes,
+            "dire_consequence": self.dire_consequence,
+            "deadline_reason": self.deadline_reason,
+        }
+
+
+@dataclass
 class PlotPoint:
     """A single plot point in the story."""
     id: int
@@ -236,6 +264,16 @@ class StoryState:
     suspense_level: int = 5
     plot_points: list[PlotPoint] = field(default_factory=list)
     current_phase: str = "investigation"  # investigation, climax, resolution
+    # Suspense theory: protagonist stakes, countdown, and success probability
+    detective_profile: Optional[DetectiveProfile] = None
+    time_remaining: int = 20  # Abstract time units for countdown mechanism
+    total_time: int = 20  # Total time units at start
+    success_probability: float = 0.7  # Detective's estimated chance of solving the case (0.0-1.0)
+    action_history: list[dict] = field(default_factory=list)  # Accumulated actions + outcomes
+    # Investigation agenda: systematic tracking of pre-generated crime details
+    evidence_progress: dict = field(default_factory=dict)  # evidence_id -> steps completed so far
+    undiscovered_evidence: list = field(default_factory=list)  # evidence IDs not yet fully obtained
+    alibi_status: dict = field(default_factory=dict)  # character_name -> unverified/challenged/broken
 
     def get_open_paths(self) -> list[DiscoveryPath]:
         return [p for p in self.discovery_paths if p.is_open]
