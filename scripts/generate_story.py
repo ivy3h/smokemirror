@@ -170,19 +170,19 @@ def save_outputs(
 
     # Save story
     story_path = os.path.join(output_dir, f"story_{run_id}.md")
-    with open(story_path, "w") as f:
+    with open(story_path, "w", encoding="utf-8") as f:
         f.write(story_text)
     logger.info(f"Story saved to {story_path}")
 
     # Save plot points
     plot_points_path = os.path.join(output_dir, f"plot_points_{run_id}.json")
-    with open(plot_points_path, "w") as f:
+    with open(plot_points_path, "w", encoding="utf-8") as f:
         json.dump([pp.to_dict() for pp in plot_points], f, indent=2)
     logger.info(f"Plot points saved to {plot_points_path}")
 
     # Save facts
     facts_path = os.path.join(output_dir, f"facts_{run_id}.json")
-    with open(facts_path, "w") as f:
+    with open(facts_path, "w", encoding="utf-8") as f:
         json.dump({
             "real_facts": real_facts.to_dict(),
             "fabricated_facts": fabricated_facts.to_dict(),
@@ -192,7 +192,7 @@ def save_outputs(
     # Save metrics
     if metrics:
         metrics_path = os.path.join(output_dir, f"metrics_{run_id}.json")
-        with open(metrics_path, "w") as f:
+        with open(metrics_path, "w", encoding="utf-8") as f:
             json.dump(metrics.to_dict(), f, indent=2)
         logger.info(f"Metrics saved to {metrics_path}")
 
