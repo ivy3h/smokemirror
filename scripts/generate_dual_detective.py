@@ -26,6 +26,126 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 
+def extract_plot_annotations(story: str) -> dict:
+    """Extract all plot annotations from the story and create an index."""
+
+    annotations = {
+        "关键线索": [],      # Key clues
+        "红鲱鱼": [],        # Red herrings
+        "不在场证明": [],    # Alibis
+        "误导行为": [],      # Misdirections
+        "险象环生": [],      # Close calls
+        "疑心渐起": [],      # Growing suspicion
+    }
+
+    # Find current chapter for each annotation
+    lines = story.split('\n')
+    current_chapter = "Prologue"
+
+    for line in lines:
+        # Track current chapter
+        chapter_match = re.match(r'^##\s*(Chapter\s*\d+|Epilogue|Prologue)[:\s]*(.*)', line, re.IGNORECASE)
+        if chapter_match:
+            current_chapter = chapter_match.group(1)
+            if chapter_match.group(2):
+                current_chapter += ": " + chapter_match.group(2).strip()
+
+        # Extract annotations
+        # 【关键线索 #N: 描述】
+        for match in re.finditer(r'【关键线索\s*#?(\d+)?[:\s]*([^】]+)】', line):
+            num = match.group(1) or "?"
+            desc = match.group(2).strip()
+            annotations["关键线索"].append({
+                "number": num,
+                "description": desc,
+                "chapter": current_chapter
+            })
+
+        # 【红鲱鱼 #N: 描述】
+        for match in re.finditer(r'【红鲱鱼\s*#?(\d+)?[:\s]*([^】]+)】', line):
+            num = match.group(1) or "?"
+            desc = match.group(2).strip()
+            annotations["红鲱鱼"].append({
+                "number": num,
+                "description": desc,
+                "chapter": current_chapter
+            })
+
+        # 【不在场证明: 人名 - 状态】
+        for match in re.finditer(r'【不在场证明[:\s]*([^】]+)】', line):
+            desc = match.group(1).strip()
+            annotations["不在场证明"].append({
+                "description": desc,
+                "chapter": current_chapter
+            })
+
+        # 【误导行为】
+        if '【误导行为】' in line:
+            annotations["误导行为"].append({"chapter": current_chapter})
+
+        # 【险象环生】
+        if '【险象环生】' in line:
+            annotations["险象环生"].append({"chapter": current_chapter})
+
+        # 【疑心渐起】
+        if '【疑心渐起】' in line:
+            annotations["疑心渐起"].append({"chapter": current_chapter})
+
+    return annotations
+
+
+def generate_plot_index(annotations: dict) -> str:
+    """Generate a plot index summary from annotations."""
+
+    index = []
+    index.append("\n\n---\n\n## 剧情索引 (Plot Index)\n")
+
+    # Key Clues
+    if annotations["关键线索"]:
+        index.append("\n### 关键线索 (Key Clues)\n")
+        for clue in annotations["关键线索"]:
+            index.append(f"- **#{clue['number']}** {clue['description']} — *{clue['chapter']}*\n")
+
+    # Red Herrings
+    if annotations["红鲱鱼"]:
+        index.append("\n### 红鲱鱼 (Red Herrings)\n")
+        for rh in annotations["红鲱鱼"]:
+            index.append(f"- **#{rh['number']}** {rh['description']} — *{rh['chapter']}*\n")
+
+    # Alibis
+    if annotations["不在场证明"]:
+        index.append("\n### 不在场证明 (Alibis)\n")
+        for alibi in annotations["不在场证明"]:
+            index.append(f"- {alibi['description']} — *{alibi['chapter']}*\n")
+
+    # Misdirections
+    if annotations["误导行为"]:
+        index.append("\n### 误导行为 (Misdirections by Detective B)\n")
+        chapters = [m['chapter'] for m in annotations["误导行为"]]
+        index.append(f"- 出现章节: {', '.join(set(chapters))}\n")
+        index.append(f"- 总计: {len(annotations['误导行为'])} 次\n")
+
+    # Close Calls
+    if annotations["险象环生"]:
+        index.append("\n### 险象环生 (Close Calls)\n")
+        chapters = [c['chapter'] for c in annotations["险象环生"]]
+        index.append(f"- 出现章节: {', '.join(set(chapters))}\n")
+        index.append(f"- 总计: {len(annotations['险象环生'])} 次\n")
+
+    # Growing Suspicion
+    if annotations["疑心渐起"]:
+        index.append("\n### 疑心渐起 (A's Growing Suspicion)\n")
+        chapters = [s['chapter'] for s in annotations["疑心渐起"]]
+        index.append(f"- 出现章节: {', '.join(set(chapters))}\n")
+        index.append(f"- 总计: {len(annotations['疑心渐起'])} 次\n")
+
+    # Statistics
+    total = sum(len(v) for v in annotations.values())
+    index.append(f"\n---\n*共标注 {total} 个关键剧情点*\n")
+
+    return "".join(index)
+
+
 def generate_dual_detective_story(llm) -> str:
     """Generate a mystery novel with two detectives - one real, one killer."""
 
@@ -279,7 +399,20 @@ Create the chapter outline now:"""
 
 5. **ATMOSPHERE**: Tension, suspense, psychological depth
 
-6. **FORMAT**:
+6. **PLOT ANNOTATIONS** (IMPORTANT!):
+   When key mystery elements appear in the narrative, add inline annotations using this format:
+
+   - **Key Clue discovered**: `【关键线索 #N: 简述】` (e.g., 【关键线索 #1: 手套纤维】)
+   - **Red Herring planted**: `【红鲱鱼 #N: 简述】` (e.g., 【红鲱鱼 #2: 伪造信件】)
+   - **Alibi mentioned**: `【不在场证明: 人名 - 状态】` (e.g., 【不在场证明: Rebecca - 虚假】)
+   - **Detective B misdirects**: `【误导行为】` when B actively misleads A
+   - **Close call moment**: `【险象环生】` when B nearly gets caught
+   - **A's suspicion grows**: `【疑心渐起】` when A starts doubting B
+
+   Place annotations at the END of the relevant paragraph, not mid-sentence.
+   These help readers track the mystery elements throughout the story.
+
+7. **FORMAT**:
 
 ## Chapter {chapter_num}: [Creative Title]
 
@@ -372,13 +505,32 @@ def main():
 
     story = generate_dual_detective_story(llm)
 
+    # Extract plot annotations and generate index
+    logger.info("\n[POST] Extracting plot annotations...")
+    annotations = extract_plot_annotations(story)
+    plot_index = generate_plot_index(annotations)
+
+    # Append plot index to story
+    story_with_index = story + plot_index
+
     # Save output
     run_id = datetime.now().strftime("%Y%m%d_%H%M%S")
     output_dir = project_root / "outputs" / f"dual_detective_{run_id}"
     output_dir.mkdir(parents=True, exist_ok=True)
 
     with open(output_dir / "story.md", "w", encoding="utf-8") as f:
-        f.write(story)
+        f.write(story_with_index)
+
+    # Save annotations as JSON for analysis
+    with open(output_dir / "annotations.json", "w", encoding="utf-8") as f:
+        json.dump(annotations, f, ensure_ascii=False, indent=2)
+
+    # Count annotations
+    total_annotations = sum(len(v) for v in annotations.values())
+    logger.info(f"Found {total_annotations} plot annotations:")
+    for key, items in annotations.items():
+        if items:
+            logger.info(f"  - {key}: {len(items)}")
 
     # Count words
     word_count = len(story.split())
@@ -387,8 +539,10 @@ def main():
     logger.info("\n" + "=" * 60)
     logger.info("GENERATION COMPLETED!")
     logger.info("=" * 60)
-    logger.info(f"Output: {output_dir / 'story.md'}")
+    logger.info(f"Story: {output_dir / 'story.md'}")
+    logger.info(f"Annotations: {output_dir / 'annotations.json'}")
     logger.info(f"Length: ~{word_count} words, {char_count} characters")
+    logger.info(f"Plot Points: {total_annotations} annotated")
 
     # Preview
     print("\n" + "=" * 60)

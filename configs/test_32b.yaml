@@ -37,18 +37,21 @@ suspense:
 # Reader Simulation Settings
 reader_simulation:
   enabled: true
-  num_readers: 3
+  num_readers: 3  # Informational - actual count computed from reader_roles
   reader_model: "Qwen/Qwen2.5-7B-Instruct"  # Separate smaller model for reader evaluation
   reader_roles:
     - name: "logic_analyst"
       focus: "logical consistency and deduction quality"
       weight: 1.5
+      count: 1  # Number of instances (e.g., set to 3 for 3 logic analysts)
     - name: "intuitive_reader"
       focus: "character behavior and emotional engagement"
       weight: 1.0
+      count: 1  # Number of instances
     - name: "genre_expert"
       focus: "mystery pacing and narrative structure"
       weight: 1.2
+      count: 1  # Number of instances
   checkpoints: [5, 10, 15, 20, 25]
   suspense_threshold: 6.0
 

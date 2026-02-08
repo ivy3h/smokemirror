@@ -56,6 +56,7 @@ class ReaderRole:
     name: str
     focus: str
     weight: float = 1.0
+    count: int = 1  # Number of readers with this role
 
 
 @dataclass

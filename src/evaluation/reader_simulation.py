@@ -37,6 +37,7 @@ class ReaderProfile:
     role: ReaderRole
     focus: str
     weight: float = 1.0
+    instance_id: int = 1  # Instance number (for multiple readers of same role)
 
 
 class ReaderSimulator:
@@ -60,6 +61,8 @@ class ReaderSimulator:
     def _setup_reader_profiles(self) -> list[ReaderProfile]:
         """Set up reader profiles from config.
 
+        Each role can have multiple instances (specified by count).
+
         Returns:
             List of ReaderProfile objects
         """
@@ -70,11 +73,17 @@ class ReaderSimulator:
             except ValueError:
                 role = ReaderRole.LOGIC_ANALYST
 
-            profiles.append(ReaderProfile(
-                role=role,
-                focus=role_config.focus,
-                weight=role_config.weight,
-            ))
+            # Get count (default to 1 if not specified)
+            count = getattr(role_config, 'count', 1)
+
+            # Create multiple instances of this reader type
+            for i in range(count):
+                profiles.append(ReaderProfile(
+                    role=role,
+                    focus=role_config.focus,
+                    weight=role_config.weight,
+                    instance_id=i + 1,
+                ))
 
         # Ensure we have at least one reader
         if not profiles:
@@ -96,6 +105,7 @@ class ReaderSimulator:
                 ),
             ]
 
+        logger.info(f"Created {len(profiles)} reader instances")
         return profiles
 
     def evaluate_story(
@@ -122,7 +132,10 @@ class ReaderSimulator:
         story_text = self._format_story_for_readers(plot_points)
 
         for profile in self.reader_profiles:
-            logger.info(f"Running {profile.role.value} evaluation")
+            role_name = profile.role.value
+            if profile.instance_id > 1 or any(p.instance_id > 1 for p in self.reader_profiles if p.role == profile.role):
+                role_name = f"{role_name}_{profile.instance_id}"
+            logger.info(f"Running {role_name} evaluation")
 
             evaluation = self._run_reader_evaluation(
                 profile=profile,
@@ -285,8 +298,13 @@ class ReaderSimulator:
 
         overall_score = max(1.0, min(10.0, avg_suspense - issue_penalty))
 
+        # Include instance ID in role name if multiple instances
+        role_name = profile.role.value
+        if profile.instance_id > 1:
+            role_name = f"{role_name}_{profile.instance_id}"
+
         return ReaderEvaluation(
-            reader_role=profile.role.value,
+            reader_role=role_name,
             suspense_scores=suspense_scores,
             criminal_predictions=criminal_predictions,
             inconsistency_flags=inconsistency_flags,
