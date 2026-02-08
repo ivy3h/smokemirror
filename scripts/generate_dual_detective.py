@@ -83,6 +83,13 @@ Create:
    - Show them deciding to insert themselves into the investigation
    - End with them meeting Detective A as "partners"
 
+6. **MULTIPLE SUSPECTS**:
+   - Create 4-7 compelling suspects, each with their own motive and opportunity
+   - Each suspect should have a believable connection to the victim
+   - Detective B strategically shifts suspicion between these suspects to keep A confused
+   - Some suspects may have dark secrets unrelated to the murder
+   - The reader watches as innocent people become entangled in B's web
+
 ## FORMAT:
 
 ```
@@ -101,10 +108,18 @@ Create:
 ## Story Settings
 
 **The Murder**: [What happened, where, when]
-**The Victim**: [Name] - [Who they were] - [Connection to Detective B]
+**The Victim**: [Name] - [Who they were] - [Why Detective B killed them]
 **Detective A (Real Detective)**: [Name] - [Personality, skills, vulnerabilities]
 **Detective B (Killer-Detective)**: [Name] - [Public persona vs. true nature] - [Motive for the murder]
-**The Scapegoat**: [Who Detective B plans to frame]
+
+**The Suspects** (Create 4-7 suspects, each with motive and opportunity):
+- **Suspect 1**: [Name] - [Relationship to victim] - [Apparent motive] - [Why they seem guilty]
+- **Suspect 2**: [Name] - [Relationship to victim] - [Apparent motive] - [Why they seem guilty]
+- **Suspect 3**: [Name] - [Relationship to victim] - [Apparent motive] - [Why they seem guilty]
+- **Suspect 4**: [Name] - [Relationship to victim] - [Apparent motive] - [Why they seem guilty]
+- [Add more suspects as needed...]
+
+**The Primary Scapegoat**: [Which suspect Detective B plans to ultimately frame]
 **Key Evidence**: [What could expose Detective B if found]
 **The Partnership Dynamic**: [How they work together, why A trusts B]
 ```
@@ -138,21 +153,28 @@ Begin creating now:"""
             B provides "insights" that seem helpful but actually misdirect.
             A begins to rely on B's judgment. The reader watches the manipulation unfold."""
         elif chapter_num == 3:
-            chapter_focus = """FIRST MISDIRECTION: B plants or highlights evidence pointing to an innocent suspect.
-            A follows the false lead. B pretends to support while secretly relieved.
-            Show B's internal satisfaction while maintaining their helpful facade."""
+            chapter_focus = """SUSPECT PARADE: The detectives interview multiple suspects.
+            B strategically directs attention toward certain suspects while deflecting from others.
+            Each suspect reveals something interesting - alibis, motives, secrets.
+            B plants seeds of suspicion against the primary scapegoat while appearing objective.
+            The reader watches B manipulate which suspects A focuses on."""
         elif chapter_num == 4:
             chapter_focus = """CLOSE CALL: A stumbles onto something that could expose B.
-            B must think fast - they redirect, distract, or "accidentally" destroy evidence.
-            The reader's tension peaks as B narrowly avoids exposure."""
+            Perhaps a witness saw something, or evidence points in an uncomfortable direction.
+            B must think fast - they redirect toward another suspect, distract, or "accidentally" contaminate evidence.
+            The reader's tension peaks as B narrowly avoids exposure by shifting focus to another suspect."""
         elif chapter_num == 5:
-            chapter_focus = """DEEPENING BOND: A and B share personal moments - meals, conversations, trust-building.
-            A opens up to B. B uses this to understand A's weaknesses.
-            The reader sees the tragic irony of this false friendship."""
+            chapter_focus = """DEEPENING INVESTIGATION: The suspect pool narrows as alibis are verified or broken.
+            A and B debate which suspects are most likely guilty - B guides these discussions carefully.
+            Show suspects being interrogated, their reactions, their secrets coming to light.
+            B uses legitimate police work to build the case against the wrong person.
+            Personal moments between A and B build trust while B continues their deception."""
         elif chapter_num == 6:
-            chapter_focus = """THE FRAME TIGHTENS: Evidence against the scapegoat mounts.
-            B orchestrates the final pieces. A is convinced they've found the killer.
-            The reader watches an innocent person being destroyed."""
+            chapter_focus = """THE FRAME TIGHTENS: Evidence against the primary scapegoat mounts.
+            Other suspects are gradually eliminated or deprioritized.
+            B orchestrates the final pieces - perhaps "discovering" planted evidence.
+            A is increasingly convinced they've found the killer.
+            The reader watches an innocent person being systematically destroyed."""
         elif chapter_num == 7:
             chapter_focus = """DOUBT CREEPS IN: Something doesn't sit right with A.
             A small inconsistency, a gut feeling, a witness statement that doesn't match.
@@ -192,6 +214,12 @@ Begin creating now:"""
    - Show realistic detective partnership (discussing leads, bouncing ideas)
    - B's suggestions should seem helpful on the surface
    - The reader should see the manipulation beneath
+
+4. **SUSPECT DEVELOPMENT**:
+   - Reference and develop the various suspects established in the story
+   - Show interrogations, alibis being checked, motives being explored
+   - B strategically guides which suspects receive more scrutiny
+   - Each suspect should feel like a real person with their own story
 
 4. **PSYCHOLOGICAL DEPTH**:
    - A's growing trust (and eventual suspicion)
