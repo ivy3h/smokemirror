@@ -36,16 +36,20 @@ suspense:
 
 # Reader Simulation Settings
 reader_simulation:
-  enabled: false
-  num_readers: 2
+  enabled: true
+  num_readers: 3
+  reader_model: "Qwen/Qwen2.5-7B-Instruct"  # Separate smaller model for reader evaluation
   reader_roles:
     - name: "logic_analyst"
-      focus: "logical consistency"
+      focus: "logical consistency and deduction quality"
       weight: 1.5
     - name: "intuitive_reader"
-      focus: "character behavior"
+      focus: "character behavior and emotional engagement"
       weight: 1.0
-  checkpoints: [5, 10, 15, 20]
+    - name: "genre_expert"
+      focus: "mystery pacing and narrative structure"
+      weight: 1.2
+  checkpoints: [5, 10, 15, 20, 25]
   suspense_threshold: 6.0
 
 # Refinement Settings

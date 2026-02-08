@@ -63,6 +63,7 @@ class ReaderSimulationConfig:
     """Reader simulation configuration."""
     enabled: bool = True
     num_readers: int = 3
+    reader_model: str = "Qwen/Qwen2.5-7B-Instruct"  # Separate model for reader evaluation
     reader_roles: list[ReaderRole] = field(default_factory=list)
     checkpoints: list[int] = field(default_factory=lambda: [5, 10, 15])
     suspense_threshold: float = 6.0
@@ -143,6 +144,7 @@ def load_config(config_path: Optional[str] = None) -> Config:
     reader_cfg = ReaderSimulationConfig(
         enabled=reader_yaml.get("enabled", True),
         num_readers=reader_yaml.get("num_readers", 3),
+        reader_model=reader_yaml.get("reader_model", "Qwen/Qwen2.5-7B-Instruct"),
         reader_roles=reader_roles,
         checkpoints=reader_yaml.get("checkpoints", [5, 10, 15]),
         suspense_threshold=reader_yaml.get("suspense_threshold", 6.0),
