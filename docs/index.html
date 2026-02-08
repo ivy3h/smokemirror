@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmokeMirror - AI Mystery Story Generator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Landing / Hero -->
+  <section id="hero">
+    <div class="smoke-overlay"></div>
+    <div class="hero-content">
+      <h1>Smoke<span class="accent">Mirror</span></h1>
+      <p class="tagline">AI-Powered Crime Mystery Generator with Suspense Theory</p>
+      <p class="subtitle">A dual-layer narrative where readers know the truth, but the detective is systematically misled by conspirators.</p>
+      <button id="btn-generate" class="btn-primary">Generate Mystery</button>
+    </div>
+  </section>
+
+  <!-- Pipeline Progress -->
+  <section id="pipeline" class="hidden">
+    <div class="pipeline-header">
+      <h2>Generation Pipeline</h2>
+      <div class="countdown-bar">
+        <div class="countdown-fill" id="countdown-fill"></div>
+      </div>
+      <p class="countdown-label" id="countdown-label">Initializing...</p>
+    </div>
+
+    <div class="pipeline-steps">
+      <div class="step" id="step-1" data-step="1">
+        <div class="step-indicator"><span>1</span></div>
+        <div class="step-body">
+          <h3>Crime Backstory</h3>
+          <p class="step-desc">Generating crime facts, characters, and evidence...</p>
+          <div class="step-content" id="content-1"></div>
+        </div>
+      </div>
+
+      <div class="step" id="step-2" data-step="2">
+        <div class="step-indicator"><span>2</span></div>
+        <div class="step-body">
+          <h3>Fabricated Narrative</h3>
+          <p class="step-desc">Conspirators build a false story to mislead the detective...</p>
+          <div class="step-content" id="content-2"></div>
+        </div>
+      </div>
+
+      <div class="step" id="step-3" data-step="3">
+        <div class="step-indicator"><span>3</span></div>
+        <div class="step-body">
+          <h3>Detective Investigation</h3>
+          <p class="step-desc">Suspense meta-controller generates the investigation with countdown pressure...</p>
+          <div class="step-content" id="content-3"></div>
+        </div>
+      </div>
+
+      <div class="step" id="step-4" data-step="4">
+        <div class="step-indicator"><span>4</span></div>
+        <div class="step-body">
+          <h3>Reader Evaluation</h3>
+          <p class="step-desc">Simulated readers score suspense and flag issues...</p>
+          <div class="step-content" id="content-4"></div>
+        </div>
+      </div>
+
+      <div class="step" id="step-5" data-step="5">
+        <div class="step-indicator"><span>5</span></div>
+        <div class="step-body">
+          <h3>Refinement</h3>
+          <p class="step-desc">Addressing flagged issues and improving weak plot points...</p>
+          <div class="step-content" id="content-5"></div>
+        </div>
+      </div>
+
+      <div class="step" id="step-6" data-step="6">
+        <div class="step-indicator"><span>6</span></div>
+        <div class="step-body">
+          <h3>Story Assembly</h3>
+          <p class="step-desc">Assembling the final dual-layer narrative...</p>
+          <div class="step-content" id="content-6"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final Story -->
+  <section id="story-output" class="hidden">
+    <div class="story-header">
+      <h2>Generated Mystery</h2>
+      <div class="story-meta" id="story-meta"></div>
+    </div>
+    <div class="story-body" id="story-body"></div>
+    <button id="btn-restart" class="btn-secondary">Generate Another</button>
+  </section>
+
+  <!-- Architecture Diagram -->
+  <section id="architecture">
+    <h2>System Architecture</h2>
+    <div class="arch-diagram">
+      <div class="arch-row">
+        <div class="arch-box phase1">
+          <h4>Phase 1</h4>
+          <p>Crime Backstory Generator</p>
+          <small>victim, criminal, conspirators, evidence, timeline</small>
+        </div>
+        <div class="arch-arrow">&rarr;</div>
+        <div class="arch-box phase2">
+          <h4>Phase 2</h4>
+          <p>Fabricated Narrative Generator</p>
+          <small>fake suspect, planted evidence, cover story, alibis</small>
+        </div>
+      </div>
+      <div class="arch-row">
+        <div class="arch-box phase3 wide">
+          <h4>Phase 3 - Suspense Meta-Controller</h4>
+          <p>Iterative investigation loop with countdown mechanism</p>
+          <div class="arch-sub">
+            <span>Detective Actions</span>
+            <span>Collision Detection</span>
+            <span>Conspirator Interventions</span>
+            <span>Multi-step Clues</span>
+            <span>Alibi Verification</span>
+          </div>
+        </div>
+      </div>
+      <div class="arch-row">
+        <div class="arch-box phase4">
+          <h4>Phase 4</h4>
+          <p>Reader Simulation</p>
+          <small>3 reader types evaluate suspense &amp; consistency</small>
+        </div>
+        <div class="arch-arrow">&rarr;</div>
+        <div class="arch-box phase5">
+          <h4>Phase 5</h4>
+          <p>Feedback &amp; Refinement</p>
+          <small>consensus-driven revision of weak plot points</small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>SmokeMirror &mdash; Built with Qwen2.5-7B-Instruct &amp; Suspense Theory</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

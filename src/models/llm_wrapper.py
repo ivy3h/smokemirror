@@ -110,8 +110,10 @@ class LLMWrapper:
         if system_prompt:
             messages.append({"role": "system", "content": system_prompt})
 
-        # For JSON requests or when explicitly disabled, add /no_think to disable Qwen3 thinking mode
-        if expect_json or disable_thinking:
+        # For Qwen3 models: add /no_think to disable thinking mode (saves tokens)
+        # Qwen2.5 and other models don't support this tag
+        is_qwen3 = "qwen3" in self.config.name.lower()
+        if is_qwen3 and (expect_json or disable_thinking):
             prompt = prompt + "\n\n/no_think"
 
         messages.append({"role": "user", "content": prompt})

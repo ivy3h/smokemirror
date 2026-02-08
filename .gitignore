@@ -46,4 +46,4 @@ Thumbs.db
 
 # Cache
 .cache/
-docs/
+# docs/ — now used for GitHub Pages website

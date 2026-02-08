@@ -1,0 +1,278 @@
+/* ===== Base ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0f;
+  --bg2:#12121a;
+  --card:#1a1a28;
+  --border:#2a2a3a;
+  --text:#c8c8d4;
+  --text-dim:#6a6a80;
+  --accent:#e8443a;
+  --accent2:#ff6b5e;
+  --gold:#d4a857;
+  --green:#4caf7a;
+  --blue:#5b8cd4;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.6;
+  overflow-x:hidden;
+}
+h1,h2,h3,h4{font-weight:600;color:#e0e0ec}
+a{color:var(--accent2)}
+
+/* ===== Hero ===== */
+#hero{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  position:relative;
+  background:radial-gradient(ellipse at 50% 40%,#1a1028 0%,var(--bg) 70%);
+}
+.smoke-overlay{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(circle at 20% 60%,rgba(232,68,58,.06) 0%,transparent 50%),
+    radial-gradient(circle at 80% 30%,rgba(91,140,212,.06) 0%,transparent 50%);
+  pointer-events:none;
+}
+.hero-content{position:relative;z-index:1;max-width:700px;padding:2rem}
+.hero-content h1{
+  font-size:4rem;
+  letter-spacing:-.02em;
+  margin-bottom:.5rem;
+}
+.accent{color:var(--accent)}
+.tagline{font-size:1.2rem;color:var(--text-dim);margin-bottom:.5rem}
+.subtitle{font-size:.95rem;color:var(--text-dim);margin-bottom:2rem;max-width:540px;margin-left:auto;margin-right:auto}
+
+/* ===== Buttons ===== */
+.btn-primary{
+  padding:.85rem 2.4rem;
+  font-size:1.1rem;
+  font-weight:600;
+  color:#fff;
+  background:var(--accent);
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  transition:all .2s;
+  letter-spacing:.02em;
+}
+.btn-primary:hover{background:var(--accent2);transform:translateY(-1px);box-shadow:0 4px 20px rgba(232,68,58,.3)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-secondary{
+  padding:.7rem 2rem;
+  font-size:1rem;
+  color:var(--accent2);
+  background:transparent;
+  border:1px solid var(--accent);
+  border-radius:6px;
+  cursor:pointer;
+  transition:all .2s;
+  margin-top:2rem;
+}
+.btn-secondary:hover{background:rgba(232,68,58,.1)}
+
+/* ===== Pipeline ===== */
+#pipeline{
+  max-width:860px;
+  margin:0 auto;
+  padding:3rem 1.5rem;
+}
+.pipeline-header{text-align:center;margin-bottom:2.5rem}
+.pipeline-header h2{font-size:1.8rem;margin-bottom:1rem}
+.countdown-bar{
+  width:100%;
+  height:6px;
+  background:var(--border);
+  border-radius:3px;
+  overflow:hidden;
+  margin-bottom:.5rem;
+}
+.countdown-fill{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,var(--accent),var(--gold));
+  border-radius:3px;
+  transition:width .6s ease;
+}
+.countdown-label{font-size:.85rem;color:var(--text-dim)}
+
+/* Steps */
+.pipeline-steps{display:flex;flex-direction:column;gap:.5rem}
+.step{
+  display:flex;
+  gap:1.2rem;
+  padding:1rem 0;
+  opacity:.35;
+  transition:opacity .4s;
+}
+.step.active,.step.done{opacity:1}
+.step-indicator{
+  flex-shrink:0;
+  width:36px;height:36px;
+  border-radius:50%;
+  border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.85rem;font-weight:700;color:var(--text-dim);
+  transition:all .3s;
+}
+.step.active .step-indicator{border-color:var(--accent);color:var(--accent);box-shadow:0 0 12px rgba(232,68,58,.3)}
+.step.done .step-indicator{border-color:var(--green);color:var(--green);background:rgba(76,175,122,.1)}
+.step-body{flex:1;min-width:0}
+.step-body h3{font-size:1.05rem;margin-bottom:.2rem}
+.step-desc{font-size:.85rem;color:var(--text-dim)}
+.step-content{
+  margin-top:.8rem;
+  max-height:0;
+  overflow:hidden;
+  transition:max-height .5s ease;
+}
+.step.active .step-content,.step.done .step-content{max-height:2000px}
+
+/* Content cards inside steps */
+.info-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:1rem 1.2rem;
+  margin-bottom:.6rem;
+  font-size:.9rem;
+}
+.info-card h4{font-size:.9rem;color:var(--gold);margin-bottom:.4rem}
+.info-card .label{color:var(--text-dim);font-size:.8rem}
+.info-card .value{color:var(--text)}
+.info-row{display:flex;gap:.5rem;margin-bottom:.3rem;flex-wrap:wrap}
+.tag{
+  display:inline-block;
+  padding:.15rem .5rem;
+  background:rgba(91,140,212,.12);
+  color:var(--blue);
+  border-radius:4px;
+  font-size:.78rem;
+}
+.tag.danger{background:rgba(232,68,58,.12);color:var(--accent2)}
+.tag.gold{background:rgba(212,168,87,.12);color:var(--gold)}
+.tag.green{background:rgba(76,175,122,.12);color:var(--green)}
+
+/* Plot points */
+.plot-point{
+  background:var(--card);
+  border-left:3px solid var(--border);
+  padding:.8rem 1rem;
+  margin-bottom:.5rem;
+  border-radius:0 6px 6px 0;
+  font-size:.85rem;
+  animation:slideIn .4s ease;
+}
+.plot-point.collision{border-left-color:var(--accent)}
+.plot-point.progress{border-left-color:var(--green)}
+.plot-point .pp-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem}
+.plot-point .pp-id{font-weight:700;color:var(--text-dim);font-size:.78rem}
+.plot-point .pp-suspense{font-size:.75rem}
+.plot-point .pp-body{color:var(--text)}
+.plot-point .pp-reveal{font-size:.8rem;color:var(--gold);font-style:italic;margin-top:.3rem}
+
+@keyframes slideIn{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:translateX(0)}}
+
+/* Suspense bar */
+.suspense-bar{
+  display:flex;align-items:center;gap:.5rem;
+  margin-top:.4rem;font-size:.78rem;color:var(--text-dim);
+}
+.suspense-track{flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.suspense-value{height:100%;border-radius:2px;transition:width .3s}
+
+/* Reader eval */
+.eval-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:1rem;
+  margin-bottom:.6rem;
+}
+.eval-card h4{margin-bottom:.5rem;font-size:.9rem}
+.score-row{display:flex;justify-content:space-between;font-size:.85rem;margin-bottom:.3rem}
+.score-val{font-weight:700}
+
+/* ===== Story Output ===== */
+#story-output{
+  max-width:780px;
+  margin:0 auto;
+  padding:3rem 1.5rem;
+  text-align:center;
+}
+.story-header h2{font-size:2rem;margin-bottom:.5rem}
+.story-meta{font-size:.85rem;color:var(--text-dim);margin-bottom:2rem}
+.story-body{
+  text-align:left;
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:2rem 2.5rem;
+  font-size:.95rem;
+  line-height:1.8;
+  white-space:pre-wrap;
+  max-height:70vh;
+  overflow-y:auto;
+}
+.story-body h1,.story-body h2,.story-body h3{margin-top:1.5rem;margin-bottom:.5rem}
+.story-body hr{border:none;border-top:1px solid var(--border);margin:1.5rem 0}
+
+/* ===== Architecture ===== */
+#architecture{
+  max-width:860px;
+  margin:0 auto;
+  padding:3rem 1.5rem 4rem;
+}
+#architecture h2{text-align:center;font-size:1.6rem;margin-bottom:2rem}
+.arch-diagram{display:flex;flex-direction:column;gap:1.2rem;align-items:center}
+.arch-row{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;justify-content:center}
+.arch-box{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:1rem 1.4rem;
+  text-align:center;
+  width:280px;
+}
+.arch-box.wide{width:600px}
+.arch-box h4{font-size:.85rem;color:var(--text-dim);margin-bottom:.3rem}
+.arch-box p{font-size:.9rem;margin-bottom:.3rem}
+.arch-box small{font-size:.75rem;color:var(--text-dim)}
+.arch-sub{display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center;margin-top:.6rem}
+.arch-sub span{
+  padding:.2rem .5rem;
+  background:rgba(232,68,58,.08);
+  border:1px solid rgba(232,68,58,.2);
+  border-radius:4px;
+  font-size:.72rem;
+  color:var(--accent2);
+}
+.arch-arrow{font-size:1.5rem;color:var(--text-dim)}
+.phase1{border-top:2px solid var(--blue)}
+.phase2{border-top:2px solid var(--accent)}
+.phase3{border-top:2px solid var(--gold)}
+.phase4{border-top:2px solid var(--green)}
+.phase5{border-top:2px solid #9b59b6}
+
+/* ===== Footer ===== */
+footer{text-align:center;padding:2rem;color:var(--text-dim);font-size:.8rem;border-top:1px solid var(--border)}
+
+/* ===== Utility ===== */
+.hidden{display:none!important}
+
+/* ===== Responsive ===== */
+@media(max-width:640px){
+  .hero-content h1{font-size:2.5rem}
+  .arch-box{width:100%}
+  .arch-box.wide{width:100%}
+  .arch-arrow{display:none}
+  .story-body{padding:1.2rem}
+}
