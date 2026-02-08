@@ -436,6 +436,180 @@ He never found it. But he never stopped looking.
   meta: { model: "Qwen2.5-7B-Instruct", plot_points: 16, suspense: "7.9/10", countdown: "5 days" },
 },
 
+// ===== Story 4: Shadows Over QuantumTech (Tech Startup - Qwen2.5-7B) =====
+{
+  crime: {
+    crime_type: "murder",
+    setting: "Tech Startup - QuantumTech Inc.",
+    victim: { name: "Alex Chen", occupation: "CEO of QuantumTech Inc." },
+    criminal: { name: "Zara Li", occupation: "Director of Operations", motive: "Wanted to take over the company; Alex refused to step down despite losing control", means: "Access to company security systems and financial records", opportunity: "Alex was working late finalizing documents that could expose her unethical practices" },
+    conspirators: [
+      { name: "Victor Tan", occupation: "Chief Financial Officer", leverage: "Owed money to Zara from a failed investment deal", alibi: "Claimed he was on a business trip out of town" },
+      { name: "Mia Wang", occupation: "IT Manager", leverage: "Blackmailed over embezzlement scandal", alibi: "Said she was attending a conference in another city" },
+      { name: "Samuel Lee", occupation: "Junior Developer", leverage: "Promised promotion and raise for his family's medical expenses", alibi: "Claimed he was working overtime in the development lab until midnight" },
+    ],
+    evidence: [
+      { id: "E1", type: "physical", description: "Vial of unknown liquid (sedative) in Zara's desk drawer", location: "Zara Li's Office", steps: 2, real_meaning: "Confirms Zara's involvement in preparing the murder weapon" },
+      { id: "E2", type: "digital", description: "Surveillance footage showing figure matching Samuel's description", location: "Security System", steps: 2, real_meaning: "Someone was there to distract security, supporting Samuel's role" },
+      { id: "E3", type: "documentary", description: "Financial records with unexplained withdrawals before murder", location: "Victor Tan's Computer", steps: 2, real_meaning: "Points to Victor's involvement in covering up the murder financially" },
+    ],
+  },
+  fabricated: {
+    fake_suspect: { name: "David Kim", occupation: "Sales Representative at QuantumTech", fake_motive: "Long-standing grudge against Alex for rejecting his sales pitches and undermining his reputation" },
+    cover_story: "David Kim, a disgruntled employee with a history of frustration towards Alex Chen, acted alone in a moment of rage. His possession of the sedative and a fabricated note link him to the crime.",
+    alibis: { "Victor Tan": "Claimed urgent business trip to Europe with hotel reservations", "Mia Wang": "Attended a high-profile industry conference in NYC, confirmed through check-ins and social media", "Samuel Lee": "Working late at R&D lab, verified by security pass and smart home system logs" },
+  },
+  detective: {
+    name: "Detective Zhang",
+    background: "Seasoned investigator with sharp analytical skills",
+    personal_stakes: "Assigned lead on QuantumTech's highest-profile case; reputation on the line",
+    dire_consequence: "If unsolved, an innocent man (David Kim) will be charged with murder",
+    deadline_reason: "Corporate security systems will overwrite critical logs in the automatic maintenance cycle",
+  },
+  plot_points: [
+    { id:1, action:"Interviews Samuel Lee in development lab", description:"Zhang visits QuantumTech. Samuel shows recent code changes to explain his late-night presence. Zhang notices subtle formatting changes but can't pin them down.", suspense:4, collision:true, reveal:"Reader sees Samuel actively protecting the conspiracy" },
+    { id:2, action:"Interviews Victor Tan at headquarters", description:"Victor calmly presents his business dinner alibi. Offers to review emails and financial records to verify.", suspense:6, collision:true, reveal:"Reader watches Victor deploy pre-arranged cover story" },
+    { id:3, action:"Interviews Mia Wang about software glitch", description:"Mia mentions a 'software glitch' that disrupted cameras. She names Zara Li as unusually anxious that night.", suspense:7, collision:true, reveal:"Reader sees Mia deflecting attention away from her role" },
+    { id:4, action:"Examines surveillance footage", description:"Footage shows figure matching Samuel's description entering/exiting during the murder window. Samuel contacts Zhang with 'new information.'", suspense:9, collision:true, reveal:"Reader sees Samuel actively steering the investigation" },
+    { id:5, action:"Examines Zara Li's office desk", description:"Zhang finds evidence and verifies Victor's alibi. Business trip story appears consistent on the surface.", suspense:10, collision:false, reveal:"Reader knows Victor's alibi is fabricated" },
+    { id:6, action:"Interviews David Kim in sales department", description:"David provides his version of events. Zhang also checks Mia's conference alibi - appears solid.", suspense:10, collision:false, reveal:"Reader knows Mia's alibi is fabricated" },
+    { id:7, action:"Examines private meeting room", description:"Zhang searches for overlooked physical evidence. Checks Samuel's alibi - overtime story matches security logs.", suspense:10, collision:false, reveal:"Reader knows Samuel's alibi is fabricated" },
+    { id:8, action:"Examines Victor's financial records", description:"Unusual withdrawals found shortly before the murder. Partial progress - amounts suspicious but origin unclear.", suspense:10, collision:false, reveal:"Reader knows these records point to Victor's involvement" },
+    { id:9, action:"Re-examines meeting room", description:"Budget cuts have left security systems outdated. Camera recordings from that night are incomplete or lost.", suspense:10, collision:false, reveal:null },
+    { id:10, action:"Interviews David Kim at home", description:"Kim's home security system triggers a false alarm during the interview. Local police called in.", suspense:11, collision:false, reveal:null },
+    { id:11, action:"Examines David Kim's computer", description:"Zhang obtains full financial records showing unexplained withdrawals. Evidence seemingly implicates David Kim.", suspense:11, collision:false, reveal:"Reader knows the true meaning: records point to Victor's cover-up" },
+    { id:13, action:"Interviews Zara Li at home", description:"Zhang obtains full surveillance footage. Figure matches Samuel but evidence is presented as implicating David.", suspense:10, collision:false, reveal:"Reader knows footage actually shows Samuel distracting security" },
+    { id:16, action:"Interviews Alex Chen's former colleagues", description:"Victor suggests interviewing the new IT department head, Mr. Li, diverting the investigation further.", suspense:11, collision:true, reveal:"Reader sees Victor actively protecting the conspiracy" },
+    { id:17, action:"Interviews new IT head Mr. Li", description:"Mia suggests re-examining security logs from the crime night - another misdirection.", suspense:10, collision:true, reveal:"Reader sees Mia actively protecting the conspiracy" },
+    { id:20, action:"Interviews CEO's assistant Sarah Chen", description:"Zhang obtains the sedative vial evidence. It confirms involvement but is presented as implicating David Kim.", suspense:10, collision:false, reveal:"Reader knows vial confirms Zara's involvement in preparing the murder weapon" },
+    { id:22, action:"Interviews new IT head Mr. Li again", description:"More evidence gathered, all seemingly pointing toward David Kim.", suspense:10, collision:false, reveal:null },
+    { id:23, action:"Re-examines crime scene exterior", description:"Mia approaches Zhang and suggests re-examining IT systems for unauthorized access - more misdirection.", suspense:10, collision:true, reveal:"Reader sees Mia actively protecting the conspiracy" },
+    { id:25, action:"Interviews Xiao Li's mentor", description:"Victor asks about financial discrepancies in Xiao Li's expense reports - final misdirection before case closes.", suspense:10, collision:true, reveal:"Reader sees Victor actively protecting the conspiracy" },
+  ],
+  evaluation: {
+    logic_analyst: { score: 6.87, prediction_correct: false, issues: 0 },
+    intuitive_reader: { score: 4.98, prediction_correct: false, issues: 6 },
+    genre_expert: { score: 5.9, prediction_correct: false, pacing: "Flat middle section, premature peak at plot point 4" },
+  },
+  refinement: { issues_found: 7, issues_fixed: 5, details: [
+    "Addressed sharp suspense drops at plot points 13, 20",
+    "Improved false alarm at David Kim's home for better engagement",
+    "Strengthened administrative obstacle realism",
+    "Fixed security budget-cut documentation gaps",
+    "Revised unengaging plot points 15, 21 for better pacing",
+  ]},
+  story_text: `# Shadows Over QuantumTech
+
+*A Novel*
+
+---
+
+## Prologue
+
+In the dimly lit atrium of QuantumTech's headquarters, shadows danced under the flickering fluorescent lights, casting elongated silhouettes across the sleek, glass walls. The air was thick with tension, palpable as the scent of fresh coffee mingled with the faint aroma of disinfectant.
+
+Alex Chen, once the commanding figure of this bustling corporate jungle, no longer held sway. His reign had crumbled amidst internal conflicts that left him sidelined yet still holding onto the symbolic power of his position. Across town, Zara Li waited impatiently, tapping out coded messages to her co-conspirators.
+
+Victor Tan, Mia Wang, and Samuel Lee stood as pillars of her support, their roles orchestrated with meticulous precision. They had planned every detail, each communication carefully encrypted and dispersed among a network of fake personas designed to obscure their true intentions.
+
+David Kim, the newly appointed chief investigator, arrived at the scene just as dawn broke. He carried with him a relentless drive to uncover the truth. Yet, as he began piecing together the fragments of evidence, the pieces seemed to point towards an unlikely culprit - a junior developer named Samuel Lee, whose programming skills were more than enough to cover any digital tracks.
+
+But in the darkness that lurked beneath the surface of QuantumTech, where lies were as common as data breaches, the truth was far from simple.
+
+---
+
+## Chapter 1: The Discovery
+
+The rain was relentless, hammering against the glass windows of Detective Zhang's office. He sat behind his cluttered desk, scanning the file - Alex Chen, thirty-five years old, tech mogul, last seen alive at QuantumTech Inc. late Thursday evening.
+
+Detective Liu entered with new evidence: unusual transactions, transfers to offshore accounts from Alex's personal account shortly after a late meeting ended. The numbers didn't add up.
+
+Zhang drove to QuantumTech's development lab. Samuel Lee stood behind a desk covered in monitors and technical manuals, his face bearing traces of fatigue. He showed Zhang code updates for a new security protocol - a sophisticated encryption algorithm. Something caught Zhang's eye: a subtle formatting change near the bottom of one page. So minor he nearly missed it.
+
+*The reader knows: Samuel's nervousness isn't about the code. It's about the conspiracy he's protecting.*
+
+Victor Tan called, his voice steady, almost too composed. He offered emails and financial records to verify his alibi. Cooperative. Helpful. The perfect mask.
+
+*The reader knows: Victor's helpfulness is itself a weapon of misdirection.*
+
+Back at the lab, Samuel grew agitated. His hands fidgeted, his gaze darted restlessly. "I wasn't anywhere near the scene of the crime. That night, I was locked in this very room, finalizing these updates."
+
+Zhang studied his face, searching for deceit. Something didn't ring true - perhaps the way Lee's hands kept tapping the table, the subtle hesitation when mentioning his break. But without concrete evidence, the detective moved on.
+
+---
+
+## Chapter 2: First Threads
+
+Mia Wang sat at a conference table, her hair loose and tangled, looking exhausted. She mentioned a software glitch that disrupted cameras around nine o'clock - a sudden freeze, the video feed going dark.
+
+"Zara Li was especially anxious about the delay," Mia added, "pacing around the room and checking her watch frequently."
+
+*The reader knows: Mia is the one who engineered the camera disruption. Her mention of Zara's anxiety is calculated - just enough truth to seem helpful, wrapped in deflection.*
+
+Zhang examined the surveillance footage showing a shadowy figure matching Samuel's description. David Kim's phone records checked out. Victor Tan's financial records showed two unusual withdrawals near the time of the murder.
+
+At the private meeting room, budget cuts had left security systems outdated. Fire alarms were prone to false activations, cameras frequently failed. The documentation from the night of the meeting was incomplete or lost.
+
+Zhang found a faint fingerprint indentation in the carpet. A small discovery, but combined with Victor's suspicious withdrawals, the pieces were beginning to form a picture - though not the picture the conspirators intended.
+
+---
+
+## Chapter 3: Following the Trail
+
+Zhang arrived at David Kim's home for a deeper interview. The home security system triggered during the visit - a false alarm that brought local police. More disruption, more delays.
+
+Kim's financial records showed frequent, unexplained withdrawals. "Business can be unpredictable," Kim offered, avoiding eye contact.
+
+The surveillance footage, now fully analyzed, showed the figure entering and exiting the building. All evidence was being carefully channeled toward David Kim. The real criminals' alibis held firm: Victor's business trip, Mia's conference, Samuel's overtime.
+
+*The reader watches helplessly as every thread Zhang follows has been pre-woven by the conspirators, leading inexorably toward the wrong man.*
+
+---
+
+## Chapter 4: Smoke and Mirrors
+
+Victor Tan suggested interviewing the new IT department head, Mr. Li - another diversion. Mia approached Zhang with her own suggestion: re-examine the company's IT systems for unauthorized access. Each helpful tip was another layer of misdirection.
+
+Zhang obtained the sedative vial from Zara's desk drawer. Critical evidence - but in context, it was presented as linking to David Kim's opportunity, not Zara's guilt.
+
+The detective's frustration mounted. Every lead seemed to dissolve into smoke. Every mirror reflected a different suspect. The truth was right in front of him, but the conspirators had constructed such an elaborate facade that distinguishing reality from fabrication had become nearly impossible.
+
+---
+
+## Chapter 5: Shifting Shadows
+
+Xiao Li, the young intern, provided a crucial detail: Zara had come into the office around seven o'clock, claimed to need supplies, then vanished. No one saw her leave.
+
+Victor asked about financial discrepancies in expense reports - the final misdirection. The case was closing around David Kim, the innocent man whose grudge against Alex made him the perfect fall guy.
+
+Zhang could feel something was wrong. The evidence was too clean, too convenient. But without proof of the conspiracy, without a crack in the conspirators' unified front, he was trapped.
+
+---
+
+## Epilogue
+
+Weeks have passed since the trial. The town remains shrouded in misty silence.
+
+Victor Tan, once a man of wealth and influence, now finds himself reduced to quiet evenings sipping cheap wine. His fingers tremble slightly as he pours another glass. In the dim light, shadows dance across the walls, and he hears whispers that make him jump.
+
+Mia Wang stands before a mirror, applying her makeup meticulously. The smile is false, tinged with bitterness. The guilt gnaws at her every day.
+
+Samuel Lee has managed to compartmentalize his actions. He continues his work smoothly, but sometimes, in the dead of night, he lies awake, wondering if his lie will eventually be discovered.
+
+Zara Li has found her own path. Under a different identity, she lives in a small apartment on the outskirts of the city. She reads old cases, admiring the detectives' tenacity, wishing she could have been like them. Yet even here, she feels watched.
+
+David Kim's world has collapsed around him. His reputation is irreparably damaged. He spends most days locked away, poring over old newspapers, searching for any clue that might exonerate him.
+
+Detective Zhang, unable to let go, occasionally flips through the case files. He dreams of Zara Li, of her calculated moves, her eerie calm. The name haunts him, taunting him with the knowledge that justice may have been thwarted.
+
+In the heart of the city, an old clock tower stands, its chimes echoing through the empty streets. Hidden within it, the true story of the crime lies sealed away forever - a silent testament to the power of deceit and the enduring human capacity for betrayal.
+
+---
+
+**THE END**`,
+  meta: { model: "Qwen2.5-7B-Instruct", plot_points: 25, suspense: "5.96/10", countdown: "Corporate log overwrite cycle" },
+},
+
 ]; // END ALL_STORIES
 
 // ===== App Logic =====
