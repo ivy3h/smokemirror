@@ -10,7 +10,7 @@
 
 # Activate environment
 source ~/.bashrc
-conda activate tinker
+conda activate base
 
 # Set HuggingFace cache to coc6 storage
 export HF_HOME=/coc/pskynet6/jhe478/huggingface
@@ -37,7 +37,9 @@ echo "GPU: $(nvidia-smi --query-gpu=name --format=csv,noheader 2>/dev/null || ec
 echo "=========================================="
 
 # Run dual detective generation
-python scripts/generate_dual_detective.py
+# Usage: sbatch scripts/generate_dual_detective.sh
+# With custom setting: sbatch scripts/generate_dual_detective.sh --setting "a haunted Victorian mansion"
+python scripts/generate_dual_detective.py "$@"
 
 echo ""
 echo "=========================================="

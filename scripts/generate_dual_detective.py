@@ -11,6 +11,7 @@ import os
 import sys
 import json
 import re
+import argparse
 import logging
 from datetime import datetime
 
@@ -146,16 +147,33 @@ def generate_plot_index(annotations: dict) -> str:
     return "".join(index)
 
 
-def generate_dual_detective_story(llm) -> str:
-    """Generate a mystery novel with two detectives - one real, one killer."""
+def generate_dual_detective_story(llm, setting: str = None) -> str:
+    """Generate a mystery novel with two detectives - one real, one killer.
+
+    Args:
+        llm: The language model wrapper.
+        setting: Optional custom setting/premise provided by the user.
+    """
 
     sections = []
 
     # Step 1: Generate complete story concept with all mystery elements
     logger.info("\n[1/4] Generating story concept and mystery elements...")
 
-    concept_prompt = """You are an award-winning mystery novelist. Create a complete crime mystery novel blueprint.
+    setting_instruction = ""
+    if setting:
+        setting_instruction = f"""
+## CUSTOM SETTING (provided by the user):
+{setting}
 
+You MUST incorporate this setting into the story. Adapt the crime, characters, and plot to fit this setting naturally.
+"""
+        logger.info(f"Using custom setting: {setting}")
+    else:
+        logger.info("No custom setting provided, LLM will freely choose.")
+
+    concept_prompt = f"""You are an award-winning mystery novelist. Create a complete crime mystery novel blueprint.
+{setting_instruction}
 ## THE CORE PREMISE:
 
 Two detectives are assigned to investigate a murder case together. What no one knows - except the reader - is that ONE OF THE DETECTIVES IS THE KILLER.
@@ -475,8 +493,30 @@ Write the epilogue now:"""
     return "\n".join(sections)
 
 
+def parse_args():
+    """Parse command line arguments."""
+    parser = argparse.ArgumentParser(
+        description="Generate a dual-detective mystery novel with Smokemirror"
+    )
+    parser.add_argument(
+        "--config",
+        type=str,
+        default=None,
+        help="Path to configuration file (default: configs/test_32b.yaml)"
+    )
+    parser.add_argument(
+        "--setting",
+        type=str,
+        default=None,
+        help="Optional custom setting/premise for the story (e.g., 'a haunted Victorian mansion', 'Silicon Valley tech company')"
+    )
+    return parser.parse_args()
+
+
 def main():
     """Generate a dual-detective mystery novel."""
+    args = parse_args()
+
     logger.info("=" * 60)
     logger.info("SMOKEMIRROR - DUAL DETECTIVE MODE (Free Structure)")
     logger.info("=" * 60)
@@ -487,12 +527,15 @@ def main():
     from src.utils.config import load_config
     from src.models.llm_wrapper import create_llm_wrapper
 
-    # Load 32B config
-    config = load_config(str(project_root / "configs" / "test_32b.yaml"))
+    # Load config
+    config_path = args.config or str(project_root / "configs" / "test_32b.yaml")
+    config = load_config(config_path)
     config.set_seed()
 
     logger.info(f"Model: {config.model.name}")
     logger.info("Mode: DUAL DETECTIVE (free chapter planning)")
+    if args.setting:
+        logger.info(f"Custom setting: {args.setting}")
 
     # Initialize LLM
     logger.info("\nLoading model...")
@@ -503,7 +546,7 @@ def main():
     logger.info("GENERATING STORY...")
     logger.info("=" * 60)
 
-    story = generate_dual_detective_story(llm)
+    story = generate_dual_detective_story(llm, setting=args.setting)
 
     # Extract plot annotations and generate index
     logger.info("\n[POST] Extracting plot annotations...")

@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smokemirror - Final Presentation</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0d1117; color: #e6edf3; overflow: hidden; }
+
+  .slide {
+    display: none; width: 100vw; height: 100vh;
+    padding: 60px 80px; flex-direction: column; justify-content: center;
+  }
+  .slide.active { display: flex; }
+
+  h1 { font-size: 3em; margin-bottom: 20px; color: #58a6ff; }
+  h2 { font-size: 2.2em; margin-bottom: 24px; color: #58a6ff; }
+  h3 { font-size: 1.5em; margin-bottom: 16px; color: #79c0ff; }
+  p, li { font-size: 1.25em; line-height: 1.7; color: #c9d1d9; }
+  ul, ol { margin-left: 40px; margin-bottom: 16px; }
+  li { margin-bottom: 8px; }
+
+  .title-slide { text-align: center; justify-content: center; align-items: center; background: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #0d1117 100%); }
+  .title-slide h1 { font-size: 4em; margin-bottom: 10px; }
+  .title-slide .subtitle { font-size: 1.6em; color: #8b949e; margin-bottom: 30px; }
+  .title-slide .team { font-size: 1.2em; color: #58a6ff; }
+  .title-slide .template-tag { display: inline-block; background: #1f6feb; color: #fff; padding: 8px 24px; border-radius: 20px; font-size: 1.1em; margin-top: 15px; }
+
+  .highlight { color: #f0883e; font-weight: bold; }
+  .accent { color: #3fb950; }
+  .warning { color: #d29922; }
+  .critical { color: #f85149; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 20px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; margin-top: 20px; }
+  .col { background: #161b22; padding: 24px; border-radius: 12px; border: 1px solid #30363d; }
+  .col h3 { margin-bottom: 12px; }
+
+  .box { background: #161b22; padding: 20px 28px; border-radius: 12px; border-left: 4px solid #58a6ff; margin: 12px 0; }
+  .box.green { border-left-color: #3fb950; }
+  .box.orange { border-left-color: #f0883e; }
+  .box.red { border-left-color: #f85149; }
+  .box.yellow { border-left-color: #d29922; }
+
+  .code-block { background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 16px 20px; font-family: 'Fira Code', 'Cascadia Code', monospace; font-size: 0.95em; color: #c9d1d9; margin: 12px 0; white-space: pre-wrap; overflow-y: auto; max-height: 350px; }
+
+  .flow-diagram { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; margin: 24px 0; }
+  .flow-box { background: #1f6feb; color: #fff; padding: 14px 22px; border-radius: 10px; font-size: 1em; font-weight: 600; text-align: center; min-width: 140px; }
+  .flow-box.non-neural { background: #238636; }
+  .flow-box.eval { background: #8957e5; }
+  .flow-box.data { background: #f0883e; color: #0d1117; }
+  .flow-arrow { font-size: 1.8em; color: #484f58; }
+
+  .story-excerpt { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 20px 28px; margin: 16px 0; font-style: italic; color: #8b949e; font-size: 1.05em; line-height: 1.6; max-height: 300px; overflow-y: auto; }
+  .story-excerpt .reader-note { color: #f0883e; font-style: italic; }
+
+  .metric-row { display: flex; gap: 20px; margin: 12px 0; flex-wrap: wrap; }
+  .metric-card { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 18px 24px; text-align: center; flex: 1; min-width: 150px; }
+  .metric-card .value { font-size: 2em; font-weight: bold; color: #58a6ff; }
+  .metric-card .label { font-size: 0.9em; color: #8b949e; margin-top: 4px; }
+
+  .nav { position: fixed; bottom: 20px; right: 30px; display: flex; gap: 10px; z-index: 100; }
+  .nav button { background: #21262d; color: #c9d1d9; border: 1px solid #30363d; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 1em; }
+  .nav button:hover { background: #30363d; }
+  .slide-counter { position: fixed; bottom: 25px; left: 30px; color: #484f58; font-size: 0.95em; }
+
+  .suspense-theory { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 20px; }
+  .suspense-card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 20px; text-align: center; }
+  .suspense-card .letter { font-size: 2.2em; font-weight: bold; color: #58a6ff; margin-bottom: 8px; }
+  .suspense-card .concept { font-size: 1.1em; color: #f0883e; margin-bottom: 8px; }
+  .suspense-card p { font-size: 0.95em; }
+
+  .pipeline-step { display: flex; align-items: flex-start; gap: 20px; margin: 14px 0; }
+  .step-num { background: #1f6feb; color: #fff; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em; flex-shrink: 0; }
+  .step-content h3 { margin-bottom: 4px; font-size: 1.15em; }
+  .step-content p { font-size: 1em; }
+
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+  th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid #30363d; font-size: 1em; }
+  th { color: #58a6ff; font-weight: 600; background: #161b22; }
+  td { color: #c9d1d9; }
+
+  .tag { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600; margin: 2px 4px; }
+  .tag.llm { background: #1f6feb33; color: #58a6ff; border: 1px solid #1f6feb; }
+  .tag.non-neural { background: #23863633; color: #3fb950; border: 1px solid #238636; }
+  .tag.data { background: #f0883e33; color: #f0883e; border: 1px solid #f0883e; }
+</style>
+</head>
+<body>
+
+<!-- ==================== SLIDE 1: Title ==================== -->
+<div class="slide title-slide active" id="slide-1">
+  <h1>SMOKEMIRROR</h1>
+  <div class="subtitle">AI-Powered Crime Mystery Generation with Suspense Theory</div>
+  <div class="template-tag">Template 1: Suspense Generation</div>
+  <div style="margin-top: 30px; font-size: 1.1em; color: #8b949e;">
+    Final Presentation &amp; Demonstration
+  </div>
+</div>
+
+<!-- ==================== SLIDE 2: Agenda ==================== -->
+<div class="slide" id="slide-2">
+  <h2>Presentation Outline</h2>
+  <ol style="font-size: 1.3em; line-height: 2.2;">
+    <li>System Overview &amp; Crime Story Design</li>
+    <li>Suspense Theory Implementation (Elements a-d)</li>
+    <li>System Architecture &amp; Pipeline</li>
+    <li>LLM and Non-LLM Components</li>
+    <li>The Iterative Meta-Controller</li>
+    <li>Dual-Narrative Structure &amp; Collision Detection</li>
+    <li>Reader Simulation &amp; Evaluation</li>
+    <li>Addressing Template-Specific Questions</li>
+    <li>Pitfalls &amp; Solutions</li>
+    <li>Demo: Successful &amp; Unsuccessful Runs</li>
+  </ol>
+</div>
+
+<!-- ==================== SLIDE 3: System Overview ==================== -->
+<div class="slide" id="slide-3">
+  <h2>System Overview</h2>
+  <p style="font-size: 1.3em; margin-bottom: 20px;">
+    Smokemirror generates <span class="highlight">dual-narrative crime mysteries</span> where the reader knows the truth
+    but watches a detective get systematically misled by conspirators.
+  </p>
+  <div class="two-col">
+    <div class="col">
+      <h3>What the Reader Sees</h3>
+      <ul>
+        <li>The <span class="accent">real crime</span> and who committed it</li>
+        <li>Conspirators planting false evidence</li>
+        <li>Fabricated alibis being constructed</li>
+        <li>Each intervention that blocks the detective</li>
+        <li><span class="highlight">Dramatic irony</span> as truth remains hidden</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h3>What the Detective Sees</h3>
+      <ul>
+        <li>A seemingly straightforward crime</li>
+        <li>Evidence pointing to a <span class="critical">false suspect</span></li>
+        <li>Alibis that appear to check out</li>
+        <li>"Helpful" witnesses (who are conspirators)</li>
+        <li>A case that seems to close neatly</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 4: Crime Story Design ==================== -->
+<div class="slide" id="slide-4">
+  <h2>Crime Story Design: Non-Trivial Mysteries</h2>
+  <p style="margin-bottom: 16px;">Our system addresses all core crime mystery elements:</p>
+  <div class="two-col">
+    <div>
+      <div class="box green">
+        <h3>Multiple Suspects with Means, Motive, Opportunity</h3>
+        <p>2-4 conspirators, each with distinct roles, motives, and leverage. A fake suspect is fabricated with planted evidence.</p>
+      </div>
+      <div class="box orange">
+        <h3>Red Herrings &amp; False Alibis</h3>
+        <p>A complete <span class="highlight">fabricated narrative</span> is generated, including planted physical evidence, forged documents, and coordinated alibis.</p>
+      </div>
+    </div>
+    <div>
+      <div class="box">
+        <h3>Multi-Step Clues</h3>
+        <p>Evidence requires <span class="highlight">2-3 investigation steps</span> to fully obtain. Physical/digital evidence needs more steps than testimonial.</p>
+      </div>
+      <div class="box red">
+        <h3>Active Criminal Obstruction</h3>
+        <p>Conspirators <span class="critical">actively intervene</span> when the detective approaches the truth, redirecting the investigation and closing discovery paths.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 5: Suspense Theory ==================== -->
+<div class="slide" id="slide-5">
+  <h2>Suspense Theory: Four Core Elements</h2>
+  <p style="margin-bottom: 8px;">Based on Gerrig's theory of suspense and the iterative planning approach (Xie et al., 2024):</p>
+  <div class="suspense-theory">
+    <div class="suspense-card">
+      <div class="letter">(a)</div>
+      <div class="concept">Reader Affinity</div>
+      <p>Detective with detailed <span class="accent">personal background</span>, personality, and stakes the reader can care about</p>
+      <p style="margin-top:8px;font-size:0.85em;color:#484f58;">DetectiveProfile data class</p>
+    </div>
+    <div class="suspense-card">
+      <div class="letter">(b)</div>
+      <div class="concept">Important Objective</div>
+      <p>Solving the case has <span class="accent">personal meaning</span> beyond professional duty (e.g., protege is the suspect)</p>
+      <p style="margin-top:8px;font-size:0.85em;color:#484f58;">personal_stakes field</p>
+    </div>
+    <div class="suspense-card">
+      <div class="letter">(c)</div>
+      <div class="concept">Dire Consequence</div>
+      <p>Specific <span class="critical">serious outcome</span> if the detective fails (career ruin, innocent convicted)</p>
+      <p style="margin-top:8px;font-size:0.85em;color:#484f58;">dire_consequence field</p>
+    </div>
+    <div class="suspense-card">
+      <div class="letter">(d)</div>
+      <div class="concept">Decreasing Probability</div>
+      <p><span class="warning">Countdown mechanism</span> + path closures make success increasingly unlikely each turn</p>
+      <p style="margin-top:8px;font-size:0.85em;color:#484f58;">time_remaining, success_probability</p>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 6: System Architecture ==================== -->
+<div class="slide" id="slide-6">
+  <h2>System Architecture</h2>
+  <p style="margin-bottom: 16px;">End-to-end pipeline with 6 major stages:</p>
+  <div class="flow-diagram">
+    <div class="flow-box">1. Crime Backstory<br><small>LLM generates facts</small></div>
+    <div class="flow-arrow">&#x2192;</div>
+    <div class="flow-box">2. Fabricated Narrative<br><small>LLM + validation</small></div>
+    <div class="flow-arrow">&#x2192;</div>
+    <div class="flow-box data">3. Detective Profile<br><small>Stakes &amp; deadline</small></div>
+  </div>
+  <div style="text-align:center; font-size:2em; color:#484f58; margin: 4px 0;">&#x2193;</div>
+  <div class="flow-diagram">
+    <div class="flow-box non-neural">4. Suspense Meta-Controller<br><small>Iterative generation loop</small></div>
+    <div class="flow-arrow">&#x2192;</div>
+    <div class="flow-box eval">5. Reader Simulation<br><small>3 reader types evaluate</small></div>
+    <div class="flow-arrow">&#x2192;</div>
+    <div class="flow-box">6. Story Assembly<br><small>Narrative prose output</small></div>
+  </div>
+  <div style="margin-top: 20px; display: flex; gap: 16px; justify-content: center;">
+    <span class="tag llm">LLM Component</span>
+    <span class="tag non-neural">Non-Neural Component</span>
+    <span class="tag data">Data Structure</span>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 7: LLM vs Non-LLM ==================== -->
+<div class="slide" id="slide-7">
+  <h2>LLM and Non-LLM Components</h2>
+  <div class="two-col">
+    <div class="col">
+      <h3><span class="tag llm">LLM Components</span></h3>
+      <ul>
+        <li><strong>Crime Backstory Generator</strong> &mdash; Creates criminal, victim, conspirators, evidence, timeline</li>
+        <li><strong>Fabricated Narrative Generator</strong> &mdash; Invents false suspect, plants evidence, creates alibis</li>
+        <li><strong>Detective Profile Generator</strong> &mdash; Builds protagonist with personal stakes</li>
+        <li><strong>Detective Action Generator</strong> &mdash; Proposes next investigative steps</li>
+        <li><strong>Conspirator Intervention Generator</strong> &mdash; Creates misdirection responses</li>
+        <li><strong>Story Assembler</strong> &mdash; Converts plot points to prose</li>
+        <li><strong>Reader Simulator</strong> &mdash; 3 reader types evaluate the story</li>
+      </ul>
+      <p style="margin-top:12px;font-size:0.9em;color:#8b949e;">Model: Qwen3-8B (4-bit quantized), supports thinking mode</p>
+    </div>
+    <div class="col">
+      <h3><span class="tag non-neural">Non-Neural Components</span></h3>
+      <ul>
+        <li><strong>CollisionDetector</strong> &mdash; Keyword-based semantic matching to detect when detective approaches truth</li>
+        <li><strong>SuspenseMetaController</strong> &mdash; External control loop managing the entire generation process</li>
+        <li><strong>StoryState Manager</strong> &mdash; Tracks countdown, paths, probability, evidence progress</li>
+        <li><strong>Investigation Agenda Builder</strong> &mdash; Structures pre-generated facts into actionable leads</li>
+        <li><strong>Feedback Aggregator</strong> &mdash; Synthesizes reader feedback, detects consensus issues</li>
+        <li><strong>MetricsCalculator</strong> &mdash; Computes suspense curves, quality scores (0-100)</li>
+      </ul>
+      <p style="margin-top:12px;font-size:0.9em;color:#8b949e;">Pure Python logic, no neural inference</p>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 8: Meta-Controller Deep Dive ==================== -->
+<div class="slide" id="slide-8">
+  <h2>The Iterative Suspense Meta-Controller</h2>
+  <p style="margin-bottom: 12px;">The core external control loop that walks the LLM through suspenseful story creation:</p>
+  <div class="two-col">
+    <div>
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h3>Generate Detective Action</h3>
+          <p>LLM proposes next action given <span class="highlight">full accumulated history</span> of ALL previous actions and outcomes</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h3>Collision Detection</h3>
+          <p><span class="tag non-neural">Non-neural</span> keyword matching checks if action threatens to expose truth</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h3>Branch: Intervention or Progress</h3>
+          <p>If collision: conspirator intervenes. Otherwise: standard obstacle or evidence discovery</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h3>Update State</h3>
+          <p>Tick countdown, close paths, decrease success probability, update evidence progress</p>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="code-block">// Pseudo-code for the control loop
+
+for each plot_point in 1..max_points:
+    time_remaining -= 1  // COUNTDOWN
+
+    if time_remaining == 0:
+        force_resolution()  // Deadline!
+        break
+
+    action = LLM.generate_action(
+        full_history,        // ALL prev actions
+        investigation_agenda // from pre-gen facts
+    )
+
+    collision = CollisionDetector.check(
+        action, real_facts, open_paths
+    )
+
+    if collision:
+        point = LLM.generate_intervention(
+            conspirator, vulnerable_point
+        )
+        close_path()  // Element (d)
+        success_prob -= 0.06..0.12
+    else:
+        point = generate_standard(
+            evidence_discovery | alibi_check
+        )
+
+    plot_points.append(point)
+    suspense_level += ...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 9: Collision Detection ==================== -->
+<div class="slide" id="slide-9">
+  <h2>Collision Detection: The Non-Neural Guard</h2>
+  <p style="margin-bottom: 16px;">A pure keyword-based module that detects when the detective's action could expose the conspiracy:</p>
+  <div class="two-col">
+    <div>
+      <h3>Four Detection Layers</h3>
+      <div class="box">
+        <p><strong>1. Conspirator Investigation</strong><br>Partial name matching + investigation verbs (interview, question, verify, confront...)</p>
+      </div>
+      <div class="box orange">
+        <p><strong>2. Evidence Examination</strong><br>Keyword overlap (2+) between action and evidence descriptions</p>
+      </div>
+      <div class="box yellow">
+        <p><strong>3. Location Visits</strong><br>Checks if detective visits a crime-relevant location from the timeline</p>
+      </div>
+      <div class="box green">
+        <p><strong>4. Discovery Path Proximity</strong><br>Keyword overlap with open paths + character name matching</p>
+      </div>
+    </div>
+    <div>
+      <h3>How It Creates Suspense</h3>
+      <p style="margin-bottom: 12px;">When a collision is detected:</p>
+      <ul>
+        <li>A conspirator <span class="critical">actively intervenes</span></li>
+        <li>The discovery path is <span class="warning">closed</span></li>
+        <li>Success probability <span class="critical">decreases 6-12%</span></li>
+        <li>Suspense level <span class="highlight">increases</span></li>
+        <li>Detective is redirected toward the fabricated suspect</li>
+        <li>The countdown keeps ticking &mdash; <span class="warning">time is wasted</span></li>
+      </ul>
+      <p style="margin-top: 16px; font-size: 0.95em; color: #8b949e;">
+        Sensitivity parameter (default 0.5) controls how often collisions trigger, preventing every action from being blocked.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 10: Pre-Generated Facts Integration ==================== -->
+<div class="slide" id="slide-10">
+  <h2>Integrating Pre-Generated Crime Details</h2>
+  <p style="margin-bottom: 12px;">A key innovation: the <span class="highlight">Investigation Agenda</span> deeply connects pre-generated facts to the iterative generation:</p>
+  <div class="two-col">
+    <div>
+      <h3>Investigation Agenda (built each turn)</h3>
+      <div class="code-block" style="font-size: 0.85em;">EVIDENCE TO INVESTIGATE:
+  - [E1] Security camera gap at Parking Garage
+    [0/2 steps - needs more work]
+  - [E2] Cleaning chemical traces at Crime Scene
+    [requires 3 step(s)]
+  - [E3] Threatening note in Victim's Desk
+    [1/1 steps done]
+
+ALIBIS TO VERIFY:
+  - Alice (Secretary): "Found the body at 9PM"
+    [status: unverified]
+  - Bob (IT Admin): "Scheduled maintenance"
+    [status: challenged]
+
+KNOWN SUSPECTS:
+  - Primary: Eric Thompson (fired analyst)
+    alleged motive: revenge
+
+CRIME SCENE: Corporate Office Building
+CRIME TYPE: murder</div>
+    </div>
+    <div>
+      <h3>Multi-Step Evidence Tracking</h3>
+      <table>
+        <tr><th>Evidence Type</th><th>Steps Required</th></tr>
+        <tr><td>Physical</td><td>2-3 steps</td></tr>
+        <tr><td>Digital</td><td>2-3 steps</td></tr>
+        <tr><td>Documentary</td><td>1-2 steps</td></tr>
+        <tr><td>Testimonial</td><td>1 step</td></tr>
+        <tr><td>Circumstantial</td><td>1 step</td></tr>
+      </table>
+      <div class="box green" style="margin-top: 16px;">
+        <p><strong>Key benefit:</strong> The LLM receives a structured menu of evidence, alibis, and suspects each turn. This ensures detective actions directly reference pre-generated crime details rather than inventing new disconnected elements.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 11: Reader Simulation ==================== -->
+<div class="slide" id="slide-11">
+  <h2>Reader Simulation &amp; Evaluation</h2>
+  <p style="margin-bottom: 16px;">Three simulated reader types evaluate the story for quality, each with a different focus:</p>
+  <div class="three-col">
+    <div class="col">
+      <h3 style="color: #58a6ff;">Logic Analyst</h3>
+      <ul>
+        <li>Deduction quality</li>
+        <li>Timeline consistency</li>
+        <li>Reasoning validity</li>
+        <li>Evidence chain logic</li>
+        <li>Attempts to predict the real criminal</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h3 style="color: #3fb950;">Intuitive Reader</h3>
+      <ul>
+        <li>Character behavior</li>
+        <li>Dialogue authenticity</li>
+        <li>Emotional immersion</li>
+        <li>Pacing feel</li>
+        <li>Engagement level</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h3 style="color: #f0883e;">Genre Expert</h3>
+      <ul>
+        <li>Pacing &amp; structure</li>
+        <li>Red herring quality</li>
+        <li>Trope usage</li>
+        <li>Narrative arc</li>
+        <li>Suspense curve analysis</li>
+      </ul>
+    </div>
+  </div>
+  <div class="box" style="margin-top: 20px;">
+    <h3>Key Evaluation Checks</h3>
+    <ul style="columns: 2;">
+      <li><span class="critical">Layer leak detection</span> &mdash; Can readers identify the real criminal?</li>
+      <li><span class="warning">Suspense curve analysis</span> &mdash; Flat middles, premature peaks, sudden drops</li>
+      <li>Logical inconsistency flags (critical/moderate/minor)</li>
+      <li>Feedback aggregation with consensus threshold</li>
+      <li>Iterative refinement loop (up to 3 revision passes)</li>
+      <li>Overall quality score: 0-100 scale</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 12: Template-Specific Questions ==================== -->
+<div class="slide" id="slide-12">
+  <h2>Addressing Template-Specific Questions</h2>
+  <div class="box" style="margin-bottom: 20px;">
+    <h3 style="color: #f0883e;">Question: How do you adapt the suspense technique to use pre-generated crime details?</h3>
+  </div>
+  <div class="two-col">
+    <div>
+      <h3>Our Approach: Investigation Agenda</h3>
+      <p>Crime details are pre-generated <span class="highlight">before</span> the iterative loop begins. We bridge the gap with:</p>
+      <ol style="margin-top: 12px;">
+        <li><strong>Investigation Agenda Builder</strong> &mdash; converts pre-generated facts into a structured "menu" of evidence, alibis, and suspects for the LLM</li>
+        <li><strong>Multi-step evidence tracking</strong> &mdash; each evidence item has specific required investigation steps</li>
+        <li><strong>Collision Detector</strong> &mdash; uses keyword matching against pre-generated facts to trigger interventions</li>
+        <li><strong>Fabricated Narrative validation</strong> &mdash; ensures planted evidence is consistent with and mirrors real evidence</li>
+      </ol>
+    </div>
+    <div>
+      <h3>How Crime Details Stay Consistent</h3>
+      <ul>
+        <li>Facts generated as a <span class="accent">single coherent JSON</span> structure with cross-references</li>
+        <li>Fabricated narrative is validated against real facts for consistency</li>
+        <li>Each turn, the LLM sees the full accumulated history &mdash; preventing contradictions</li>
+        <li>Evidence has <span class="highlight">dual meanings</span>: real_meaning (truth) and fabricated_meaning (what detective sees)</li>
+        <li>Timeline events are pre-coordinated between criminal and conspirators</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 13: Pitfalls ==================== -->
+<div class="slide" id="slide-13">
+  <h2>Pitfalls Encountered &amp; Solutions</h2>
+  <div class="two-col">
+    <div>
+      <div class="box red">
+        <h3>Pitfall: LLM Falling Back on Tropes</h3>
+        <p><strong>Problem:</strong> LLM generates generic "the detective had a hunch" instead of specific investigative actions.</p>
+        <p><strong>Solution:</strong> Investigation Agenda provides a concrete menu of evidence items, alibis, and locations. The LLM must reference specific pre-generated elements.</p>
+      </div>
+      <div class="box yellow">
+        <h3>Pitfall: Suspense Flatness</h3>
+        <p><strong>Problem:</strong> Suspense level stayed constant through the middle of the story.</p>
+        <p><strong>Solution:</strong> Countdown mechanism + decreasing success probability ensures natural escalation. Conspirator interventions spike suspense. Quality flags detect flat middles.</p>
+      </div>
+    </div>
+    <div>
+      <div class="box orange">
+        <h3>Pitfall: Detective Solving Too Easily</h3>
+        <p><strong>Problem:</strong> The detective would sometimes stumble directly onto the truth.</p>
+        <p><strong>Solution:</strong> CollisionDetector with tunable sensitivity (0.5 default). When truth is approached, conspirators intervene and redirect. Discovery paths close systematically.</p>
+      </div>
+      <div class="box">
+        <h3>Pitfall: Disconnected Crime Details</h3>
+        <p><strong>Problem:</strong> Pre-generated facts not deeply integrated into the iterative loop.</p>
+        <p><strong>Solution:</strong> Investigation Agenda + multi-step evidence tracking + alibi verification system. Every turn references specific pre-generated evidence IDs and character names.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 14: Successful Story ==================== -->
+<div class="slide" id="slide-14">
+  <h2>Demo: Successful Generation</h2>
+  <p style="margin-bottom: 8px;">Example story: <em>"The Dual Narrative"</em> &mdash; Murder at a corporate office</p>
+  <div class="two-col">
+    <div>
+      <div class="metric-row">
+        <div class="metric-card"><div class="value">15</div><div class="label">Plot Points</div></div>
+        <div class="metric-card"><div class="value">3</div><div class="label">Conspirators</div></div>
+        <div class="metric-card"><div class="value">7.2</div><div class="label">Avg Suspense</div></div>
+      </div>
+      <div class="metric-row">
+        <div class="metric-card"><div class="value">3</div><div class="label">Interventions</div></div>
+        <div class="metric-card"><div class="value">5</div><div class="label">Paths Closed</div></div>
+        <div class="metric-card"><div class="value" style="color:#3fb950;">None</div><div class="label">Layer Leaks</div></div>
+      </div>
+      <h3 style="margin-top: 16px;">Why It Succeeds:</h3>
+      <ul>
+        <li>15 plot points with escalating suspense</li>
+        <li>Detective arrested the wrong person (Eric Thompson)</li>
+        <li>Reader maintained dramatic irony throughout</li>
+        <li>No layer leaks &mdash; dual narrative stayed intact</li>
+        <li>Conspirators intervened at critical moments</li>
+      </ul>
+    </div>
+    <div>
+      <div class="story-excerpt">
+        <p><strong>Plot Point 5: The Crack&mdash;and the Patch</strong></p>
+        <p>"Wait&mdash;I saw Bob near the security office that night," Eric said.</p>
+        <p>Before Sarah could follow up, Bob appeared at the station&mdash;voluntarily.</p>
+        <p>"Detective, I was doing scheduled maintenance on the security system. Here's the work order." He handed over the documentation. "The cameras would show me leaving, except&mdash;well, they were down for maintenance."</p>
+        <p>He shrugged apologetically. The perfect circular alibi.</p>
+        <p class="reader-note">Sarah nods, satisfied. The reader screams silently.</p>
+      </div>
+      <div class="story-excerpt">
+        <p><strong>Epilogue:</strong></p>
+        <p>David Chen sat in his corner office... The conspiracy held because each of them had too much to lose.</p>
+        <p>Eric Thompson would spend years in prison for a crime he didn't commit.</p>
+        <p class="reader-note">And the smoke would never clear.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 15: Unsuccessful Story ==================== -->
+<div class="slide" id="slide-15">
+  <h2>Demo: Unsuccessful Generation (Mis-spun Tale)</h2>
+  <p style="margin-bottom: 12px;">Example of a completed run that produced unsatisfactory results:</p>
+  <div class="two-col">
+    <div>
+      <div class="metric-row">
+        <div class="metric-card"><div class="value" style="color:#f85149;">11</div><div class="label">Plot Points</div></div>
+        <div class="metric-card"><div class="value" style="color:#f85149;">5.1</div><div class="label">Avg Suspense</div></div>
+        <div class="metric-card"><div class="value" style="color:#f85149;">YES</div><div class="label">Layer Leak</div></div>
+      </div>
+      <h3 style="margin-top: 16px; color: #f85149;">Identified Problems:</h3>
+      <ul>
+        <li><span class="critical">Layer leak</span>: The Logic Analyst reader correctly predicted the real criminal due to a too-obvious conspirator alibi</li>
+        <li><span class="warning">Flat middle</span>: Suspense level was constant (4-5) for plot points 4-8 with no escalation</li>
+        <li><span class="warning">Too few plot points</span>: Discovery paths closed too quickly (all closed by point 11), forcing premature resolution</li>
+        <li><span class="critical">Premature peak</span>: Suspense peaked at plot point 3, then declined</li>
+        <li>Detective actions became repetitive &mdash; "re-examine evidence" appeared 3 times</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Root Causes &amp; Analysis</h3>
+      <div class="box red">
+        <p><strong>Layer Leak:</strong> The conspirator's alibi was too weakly constructed. The fabricated narrative didn't have enough planted evidence to be convincing. The reader simulation correctly flagged that "the secretary's claim to find the body exactly when expected is suspicious."</p>
+      </div>
+      <div class="box yellow">
+        <p><strong>Flat Middle:</strong> Collision sensitivity was too low for this run. No conspirator interventions occurred between plot points 4-8, so there were no tension spikes. The countdown wasn't urgent enough to drive escalation.</p>
+      </div>
+      <div class="box orange">
+        <p><strong>Premature Path Closure:</strong> The system closed 4/5 paths in the first 5 plot points due to random path closure probability. This left insufficient paths for the middle and end of the story.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 16: Key Data Structures ==================== -->
+<div class="slide" id="slide-16">
+  <h2>Key Data Structures</h2>
+  <p style="margin-bottom: 12px;">Structured representations that maintain story state throughout generation:</p>
+  <div class="three-col">
+    <div class="col">
+      <h3 style="color: #58a6ff;">CrimeFacts</h3>
+      <ul style="font-size: 0.95em;">
+        <li>Criminal (name, motive, means, opportunity)</li>
+        <li>Victim (name, occupation)</li>
+        <li>Conspirators[] (role, alibi, leverage)</li>
+        <li>Evidence[] (id, type, location, dual meanings)</li>
+        <li>Timeline (coordinated events)</li>
+        <li>DiscoveryPaths[] (ways truth could emerge)</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h3 style="color: #3fb950;">StoryState</h3>
+      <ul style="font-size: 0.95em;">
+        <li>reader_knowledge (what reader knows)</li>
+        <li>detective_knowledge (what detective knows)</li>
+        <li>time_remaining / total_time</li>
+        <li>success_probability (0.0 - 1.0)</li>
+        <li>evidence_progress {id: steps_done}</li>
+        <li>alibi_status {name: status}</li>
+        <li>action_history[] (accumulated)</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h3 style="color: #f0883e;">PlotPoint</h3>
+      <ul style="font-size: 0.95em;">
+        <li>detective_action</li>
+        <li>conspirator_intervention</li>
+        <li>obstacle</li>
+        <li>reader_revelation</li>
+        <li>detective_learns</li>
+        <li>paths_closed[]</li>
+        <li>suspense_level</li>
+        <li>is_collision</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 17: Evaluation Metrics ==================== -->
+<div class="slide" id="slide-17">
+  <h2>Evaluation Metrics &amp; Quality Scoring</h2>
+  <div class="two-col">
+    <div>
+      <h3>Overall Score Breakdown (100 pts)</h3>
+      <table>
+        <tr><th>Component</th><th>Weight</th><th>Description</th></tr>
+        <tr><td>Suspense Quality</td><td>30 pts</td><td>Avg level, ascending trend bonus</td></tr>
+        <tr><td>Reader Scores</td><td>25 pts</td><td>Average across 3 reader types</td></tr>
+        <tr><td>Structural Quality</td><td>20 pts</td><td>Minus: flat middle, premature peak, drops</td></tr>
+        <tr><td>Dual-Layer Integrity</td><td>15 pts</td><td>Zero if layer leak detected</td></tr>
+        <tr><td>Plot Point Count</td><td>10 pts</td><td>Full points for 15+</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>Quality Flags Detected</h3>
+      <ul>
+        <li><span class="critical">Layer Leak</span> &mdash; Reader can identify real criminal</li>
+        <li><span class="warning">Flat Middle</span> &mdash; Suspense variance &lt; 1.5 in middle third</li>
+        <li><span class="warning">Premature Peak</span> &mdash; Peak before 60% of story</li>
+        <li><span class="warning">Sudden Drops</span> &mdash; Suspense drops &gt; 2 levels between consecutive points</li>
+        <li><span class="critical">Critical Issues</span> &mdash; -5 points each</li>
+      </ul>
+      <h3 style="margin-top: 16px;">Suspense Trend Analysis</h3>
+      <p>Compare first half avg vs second half avg:</p>
+      <ul>
+        <li><span class="accent">Ascending</span> (+5 bonus) &mdash; 2nd half &gt; 1st half + 0.5</li>
+        <li><span class="warning">Flat</span> &mdash; within 0.5</li>
+        <li><span class="critical">Descending</span> &mdash; 2nd half &lt; 1st half - 0.5</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 18: Iterative Refinement ==================== -->
+<div class="slide" id="slide-18">
+  <h2>Iterative Refinement Loop</h2>
+  <p style="margin-bottom: 16px;">After initial generation, the system can refine the story based on reader feedback:</p>
+  <div class="flow-diagram" style="margin-bottom: 20px;">
+    <div class="flow-box">Generated<br>Plot Points</div>
+    <div class="flow-arrow">&#x2192;</div>
+    <div class="flow-box eval">3 Reader Types<br>Evaluate</div>
+    <div class="flow-arrow">&#x2192;</div>
+    <div class="flow-box non-neural">Feedback<br>Aggregation</div>
+    <div class="flow-arrow">&#x2192;</div>
+    <div class="flow-box">Revise Flagged<br>Plot Points</div>
+    <div class="flow-arrow">&#x2192;</div>
+    <div class="flow-box eval">Re-evaluate</div>
+  </div>
+  <div class="two-col">
+    <div class="col">
+      <h3>Feedback Aggregation</h3>
+      <ul>
+        <li><span class="critical">Priority 1: Layer leaks</span> &mdash; Must be fixed immediately</li>
+        <li><span class="warning">Priority 2: Suspense curve issues</span> &mdash; Flat middles, drops</li>
+        <li>Priority 3: Logical inconsistencies</li>
+        <li>Priority 4: Pacing &amp; engagement issues</li>
+        <li>Consensus threshold: 2+ readers must agree on an issue</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h3>Revision Process</h3>
+      <ul>
+        <li>Up to <span class="highlight">3 refinement iterations</span></li>
+        <li>Only flagged plot points are revised (not entire story)</li>
+        <li>Each revision sees surrounding context (prev/next plot points)</li>
+        <li>Revised points get suspense level +1 boost</li>
+        <li>Re-evaluation after each revision pass</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 19: Technical Details ==================== -->
+<div class="slide" id="slide-19">
+  <h2>Technical Details</h2>
+  <div class="two-col">
+    <div>
+      <h3>Configuration (default.yaml)</h3>
+      <div class="code-block" style="font-size: 0.9em;">model:
+  name: Qwen/Qwen3-8B
+  quantization: 4bit
+  dtype: bfloat16
+
+generation:
+  min_plot_points: 15
+  max_plot_points: 25
+  num_conspirators: 2-4
+
+suspense:
+  initial_level: 3
+  max_level: 10
+  collision_sensitivity: 0.5
+  path_close_probability: 0.7
+
+reader_simulation:
+  readers: [logic, intuitive, genre]
+
+refinement:
+  max_iterations: 3
+  consensus_threshold: 2</div>
+    </div>
+    <div>
+      <h3>Repository Structure</h3>
+      <div class="code-block" style="font-size: 0.9em;">smokemirror/
+├── src/
+│   ├── models/
+│   │   └── llm_wrapper.py      # LLM interface
+│   ├── data_structures/
+│   │   └── facts.py            # Core data models
+│   ├── generators/
+│   │   ├── crime_backstory.py  # Crime generation
+│   │   ├── fabricated_narrative.py
+│   │   └── story_assembler.py  # Prose output
+│   ├── controllers/
+│   │   └── suspense_meta_controller.py
+│   ├── evaluation/
+│   │   ├── reader_simulation.py
+│   │   ├── metrics.py
+│   │   └── feedback_aggregation.py
+│   └── utils/
+│       ├── config.py
+│       ├── prompts.py          # 15+ templates
+│       └── pipeline_logger.py
+├── configs/         # YAML configurations
+├── data/examples/   # Example facts & stories
+├── scripts/         # Run & test scripts
+└── docs/            # Web UI</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 20: Summary ==================== -->
+<div class="slide" id="slide-20">
+  <h2>Summary</h2>
+  <div class="box green" style="margin-bottom: 16px;">
+    <h3>Smokemirror: Key Contributions</h3>
+    <ul style="font-size: 1.1em;">
+      <li>Implements all four suspense theory elements (a-d) from Gerrig's theory</li>
+      <li>External iterative meta-controller guides LLM through suspenseful generation (based on Xie et al.)</li>
+      <li>Non-neural <strong>CollisionDetector</strong> prevents detective from solving too easily</li>
+      <li>Dual-narrative structure creates dramatic irony throughout</li>
+      <li><strong>Investigation Agenda</strong> deeply integrates pre-generated crime facts into iterative loop</li>
+      <li>Multi-step evidence tracking and alibi verification provide non-trivial clue progression</li>
+      <li>Reader simulation (3 types) + iterative refinement improve story quality</li>
+      <li>Comprehensive metrics system (0-100) with quality flags for automated evaluation</li>
+    </ul>
+  </div>
+  <div class="two-col">
+    <div class="col" style="text-align:center;">
+      <h3>What Worked Well</h3>
+      <p>Dual narrative with dramatic irony, countdown-driven suspense escalation, conspirator interventions at critical moments, structured investigation agenda</p>
+    </div>
+    <div class="col" style="text-align:center;">
+      <h3>Remaining Challenges</h3>
+      <p>Occasional layer leaks from weak fabricated narratives, flat suspense in middle sections, LLM repetitive actions, sensitivity tuning across different crime types</p>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 21: Thank You ==================== -->
+<div class="slide title-slide" id="slide-21">
+  <h1>Thank You</h1>
+  <div class="subtitle">SMOKEMIRROR</div>
+  <p style="font-size: 1.2em; color: #8b949e; margin-top: 20px;">
+    Template 1: Suspense Generation
+  </p>
+  <p style="font-size: 1.1em; color: #484f58; margin-top: 30px;">
+    Questions?
+  </p>
+</div>
+
+<!-- Navigation -->
+<div class="nav">
+  <button onclick="prevSlide()">&#x2190; Prev</button>
+  <button onclick="nextSlide()">Next &#x2192;</button>
+</div>
+<div class="slide-counter" id="counter">1 / 21</div>
+
+<script>
+  let current = 1;
+  const total = 21;
+
+  function showSlide(n) {
+    document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+    document.getElementById('slide-' + n).classList.add('active');
+    document.getElementById('counter').textContent = n + ' / ' + total;
+  }
+
+  function nextSlide() {
+    if (current < total) { current++; showSlide(current); }
+  }
+
+  function prevSlide() {
+    if (current > 1) { current--; showSlide(current); }
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') { e.preventDefault(); nextSlide(); }
+    if (e.key === 'ArrowLeft' || e.key === 'Backspace') { e.preventDefault(); prevSlide(); }
+  });
+</script>
+</body>
+</html>
