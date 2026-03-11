@@ -184,3 +184,7 @@ Qwen3-4B runs on the free T4 GPU (16 GB). For more options (8B, 32B, custom para
 4. **Generate Detective Investigation** — Iterative plot points with suspense control
 5. **Reader Evaluation** *(optional)* — Simulated readers assess quality
 6. **Assemble Story** — Convert plot points to prose chapters
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
